@@ -1,0 +1,771 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#176b50">
+<title>Presensi Guru dan Tenaga Kependidikan</title>
+
+<style>
+:root {
+  --green: #176b50;
+  --dark: #104b39;
+  --bg: #f1f6f4;
+  --text: #20332c;
+  --muted: #61756c;
+  --border: #dce7e1;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.container {
+  width: min(100% - 28px, 540px);
+  margin: 24px auto;
+}
+.header {
+  padding: 27px 20px;
+  text-align: center;
+  color: white;
+  background: linear-gradient(135deg, var(--dark), #218b65);
+  border-radius: 22px 22px 0 0;
+}
+.logo { font-size: 36px; margin-bottom: 9px; }
+h1 { margin: 0; font-size: 23px; }
+.subtitle { font-size: 13px; color: #d9f3e7; }
+.card {
+  background: white;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-top: 0;
+}
+.card:last-of-type { border-radius: 0 0 22px 22px; }
+.clock {
+  padding: 15px;
+  background: #eef7f2;
+  border-radius: 13px;
+  text-align: center;
+  margin-bottom: 22px;
+}
+.clock-time {
+  font-size: 29px;
+  color: var(--green);
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.clock-date { margin-top: 6px; font-size: 13px; color: var(--muted); }
+label, .section-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 9px;
+}
+input[type="text"] {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #cbd9d1;
+  border-radius: 11px;
+  padding: 12px;
+  font-size: 16px;
+  outline-color: var(--green);
+}
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 7px;
+}
+.status-box {
+  margin-top: 19px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #f4f7f5;
+  border: 1px solid var(--border);
+}
+.status-title { font-size: 13px; font-weight: 700; }
+.status-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.status-value { color: var(--muted); text-align: right; }
+.done { color: #167348; font-weight: 700; }
+.pending { color: #a05b09; font-weight: 700; }
+
+.camera {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #14221c;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+video, #preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+video { transform: scaleX(-1); }
+#preview { display: none; }
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 18px;
+  line-height: 1.7;
+  font-size: 13px;
+}
+.placeholder .icon { font-size: 44px; }
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+button {
+  min-height: 46px;
+  padding: 12px;
+  border: 0;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+button:disabled { opacity: .5; cursor: not-allowed; }
+.secondary { background: #eaf1ed; color: var(--dark); }
+.primary { background: var(--green); color: white; }
+.masuk { background: var(--green); color: white; }
+.pulang { background: #2456a6; color: white; }
+
+.gps {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 13px;
+  background: #f5f8f6;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.gps input { margin-top: 3px; width: 17px; height: 17px; }
+.gps-title { font-size: 13px; font-weight: 700; }
+.gps-detail {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: 5px;
+}
+.attendance {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+.message {
+  display: none;
+  margin-top: 15px;
+  padding: 13px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.message.success { display: block; background: #e7f7ed; color: #176b50; }
+.message.error { display: block; background: #fff0f1; color: #a31d2b; }
+.message.info { display: block; background: #edf5ff; color: #30567d; }
+.footer {
+  text-align: center;
+  padding: 18px 10px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+@media(max-width:380px) {
+  .card { padding: 16px; }
+  .attendance { grid-template-columns: 1fr; }
+  h1 { font-size: 21px; }
+}
+</style>
+</head>
+
+<body>
+<main class="container">
+  <header class="header">
+    <div class="logo">📋</div>
+    <h1>PRESENSI ONLINE</h1>
+    <p class="subtitle">Guru dan Tenaga Kependidikan</p>
+  </header>
+
+  <section class="card">
+    <div class="clock">
+      <div class="clock-time" id="clockTime">--:--:--</div>
+      <div class="clock-date" id="clockDate">Memuat tanggal...</div>
+      <div class="hint">Waktu resmi presensi dicatat oleh server.</div>
+    </div>
+
+    <label for="nama">Nama lengkap pegawai</label>
+    <input id="nama" type="text" maxlength="100"
+           placeholder="Contoh: Ahmad Mustaqim" autocomplete="name">
+    <div class="hint">Masukkan nama sesuai identitas pegawai.</div>
+
+    <div class="status-box">
+      <div class="status-title">Status presensi hari ini</div>
+      <div class="status-line">
+        <span>Absen masuk</span>
+        <span id="statusMasuk" class="status-value">Isi nama terlebih dahulu</span>
+      </div>
+      <div class="status-line">
+        <span>Absen pulang</span>
+        <span id="statusPulang" class="status-value">Isi nama terlebih dahulu</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-label">📷 Kamera langsung</div>
+
+    <div class="camera">
+      <video id="video" autoplay playsinline muted></video>
+      <img id="preview" alt="Pratinjau foto presensi">
+      <div class="placeholder" id="placeholder">
+        <div>
+          <div class="icon">📷</div>
+          <div id="cameraInfo">
+            Kamera belum aktif.<br>Tekan Aktifkan Kamera.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="secondary" id="btnCamera"
+              onclick="aktifkanKamera()">Aktifkan Kamera</button>
+      <button type="button" class="primary" id="btnFoto"
+              onclick="ambilFoto()" disabled>Ambil Foto</button>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="secondary"
+              onclick="ulangFoto()">Ulang Foto</button>
+      <button type="button" class="secondary"
+              onclick="matikanKamera()">Matikan Kamera</button>
+    </div>
+
+    <div class="hint">
+      Kamera akan berhenti setelah foto diambil. Periksa pratinjau
+      sebelum mengirim presensi.
+    </div>
+
+    <div class="gps">
+      <input type="checkbox" id="pakaiGPS" checked>
+      <div>
+        <div class="gps-title">Catat lokasi GPS jika diizinkan</div>
+        <div class="gps-detail" id="gpsStatus">
+          Lokasi opsional. Browser akan meminta izin jika diperlukan.
+        </div>
+      </div>
+    </div>
+
+    <div class="attendance">
+      <button type="button" class="masuk" id="btnMasuk"
+              onclick="kirimPresensi('Masuk')">✓ ABSEN MASUK</button>
+      <button type="button" class="pulang" id="btnPulang"
+              onclick="kirimPresensi('Pulang')">⇥ ABSEN PULANG</button>
+    </div>
+
+    <div class="message" id="message" role="status" aria-live="polite"></div>
+  </section>
+
+  <footer class="footer">
+    Presensi Guru dan Tenaga Kependidikan<br>
+    Data presensi: Google Sheets · Foto: Google Drive
+  </footer>
+</main>
+
+<script>
+/*
+ * URL BACKEND APPS SCRIPT MILIK BRO.
+ * Tidak perlu mengubah URL ini lagi.
+ */
+const API_URL = 'https://script.google.com/macros/s/AKfycbzSmDCGauDqLRE1EOnNjobdpBPO1qd0kLIImY44SXlT9hoPuTc2Y_EE2PiThlriZws2/exec';
+
+let stream = null;
+let fotoData = null;
+let sedangMengirim = false;
+let kameraDiproses = false;
+
+const video = document.getElementById('video');
+const preview = document.getElementById('preview');
+const placeholder = document.getElementById('placeholder');
+const cameraInfo = document.getElementById('cameraInfo');
+
+function tampilPesan(teks, tipe) {
+  const el = document.getElementById('message');
+  el.className = 'message ' + tipe;
+  el.textContent = teks;
+}
+
+function hapusPesan() {
+  const el = document.getElementById('message');
+  el.className = 'message';
+  el.textContent = '';
+}
+
+function namaSekarang() {
+  return document.getElementById('nama')
+    .value.trim().replace(/\s+/g, ' ');
+}
+
+function perbaruiJam() {
+  const now = new Date();
+
+  document.getElementById('clockTime').textContent =
+    now.toLocaleTimeString('id-ID', {
+      timeZone: 'Asia/Jakarta',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+
+  document.getElementById('clockDate').textContent =
+    now.toLocaleDateString('id-ID', {
+      timeZone: 'Asia/Jakarta',
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+}
+
+perbaruiJam();
+setInterval(perbaruiJam, 1000);
+
+function matikanTrackSaja() {
+  if (stream) {
+    stream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    stream = null;
+  }
+  video.srcObject = null;
+}
+
+async function aktifkanKamera() {
+  if (kameraDiproses || sedangMengirim) return;
+
+  kameraDiproses = true;
+  hapusPesan();
+
+  const btn = document.getElementById('btnCamera');
+  btn.disabled = true;
+  btn.textContent = 'Menghubungkan...';
+
+  try {
+    matikanTrackSaja();
+
+    fotoData = null;
+    preview.removeAttribute('src');
+    preview.style.display = 'none';
+    video.style.display = 'block';
+    placeholder.style.display = 'flex';
+    cameraInfo.textContent = 'Meminta akses kamera...';
+
+    if (!navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia) {
+      throw new Error(
+        'Akses kamera tidak tersedia. Buka situs melalui HTTPS dan gunakan Chrome atau Edge terbaru.'
+      );
+    }
+
+    let hasil = null;
+    let errorTerakhir = null;
+
+    try {
+      hasil = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: {
+          facingMode: { ideal: 'user' },
+          width: { ideal: 640 },
+          height: { ideal: 480 }
+        }
+      });
+    } catch (err) {
+      errorTerakhir = err;
+    }
+
+    if (!hasil) {
+      try {
+        hasil = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: true
+        });
+      } catch (err) {
+        errorTerakhir = err;
+      }
+    }
+
+    if (!hasil) throw errorTerakhir || new Error('Kamera tidak ditemukan.');
+
+    stream = hasil;
+    video.srcObject = stream;
+
+    await new Promise(function(resolve, reject) {
+      let selesai = false;
+
+      const timer = setTimeout(function() {
+        if (!selesai) {
+          selesai = true;
+          reject(new Error('Kamera terbuka tetapi gambar belum diterima.'));
+        }
+      }, 10000);
+
+      function siap() {
+        if (selesai || !video.videoWidth) return;
+
+        video.play().then(function() {
+          if (selesai) return;
+          selesai = true;
+          clearTimeout(timer);
+          resolve();
+        }).catch(function(err) {
+          if (selesai) return;
+          selesai = true;
+          clearTimeout(timer);
+          reject(err);
+        });
+      }
+
+      video.addEventListener('loadedmetadata', siap, { once: true });
+
+      if (video.readyState >= 1) siap();
+    });
+
+    placeholder.style.display = 'none';
+    document.getElementById('btnFoto').disabled = false;
+    btn.textContent = 'Kamera Aktif';
+
+    tampilPesan('Kamera aktif. Silakan ambil foto wajah.', 'success');
+
+  } catch (err) {
+    matikanTrackSaja();
+    video.style.display = 'none';
+    placeholder.style.display = 'flex';
+    cameraInfo.textContent = 'Kamera belum aktif. Periksa izin browser.';
+
+    let msg = err && err.message ? err.message : 'Kesalahan kamera.';
+
+    if (err && err.name === 'NotAllowedError') {
+      msg = 'Izin kamera ditolak. Izinkan kamera pada pengaturan situs.';
+    } else if (err && err.name === 'NotFoundError') {
+      msg = 'Kamera tidak ditemukan. Periksa perangkat kamera.';
+    } else if (err && err.name === 'NotReadableError') {
+      msg = 'Kamera sedang dipakai aplikasi lain. Tutup aplikasi Camera atau aplikasi video lainnya.';
+    }
+
+    tampilPesan('Gagal membuka kamera: ' + msg, 'error');
+
+  } finally {
+    kameraDiproses = false;
+    btn.disabled = false;
+    if (!stream) btn.textContent = 'Aktifkan Kamera';
+  }
+}
+
+function ambilFoto() {
+  if (!stream || !video.videoWidth || sedangMengirim) {
+    tampilPesan('Aktifkan kamera dan tunggu gambar tampil dahulu.', 'error');
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  const width = Math.min(video.videoWidth, 960);
+  const height = Math.round(width * video.videoHeight / video.videoWidth);
+
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext('2d');
+  ctx.translate(width, 0);
+  ctx.scale(-1, 1);
+  ctx.drawImage(video, 0, 0, width, height);
+
+  let quality = 0.8;
+  fotoData = canvas.toDataURL('image/jpeg', quality);
+
+  while (fotoData.length * 0.75 > 650000 && quality > 0.35) {
+    quality -= 0.1;
+    fotoData = canvas.toDataURL('image/jpeg', quality);
+  }
+
+  if (fotoData.length * 0.75 > 650000) {
+    fotoData = null;
+    tampilPesan('Foto terlalu besar. Coba ambil foto ulang.', 'error');
+    return;
+  }
+
+  preview.src = fotoData;
+  preview.style.display = 'block';
+  video.style.display = 'none';
+  placeholder.style.display = 'none';
+
+  matikanTrackSaja();
+
+  document.getElementById('btnFoto').disabled = true;
+  document.getElementById('btnCamera').textContent = 'Aktifkan Kamera';
+
+  tampilPesan('Foto berhasil diambil. Periksa sebelum absen.', 'success');
+}
+
+function matikanKamera() {
+  matikanTrackSaja();
+  video.style.display = 'none';
+
+  document.getElementById('btnFoto').disabled = true;
+  document.getElementById('btnCamera').textContent = 'Aktifkan Kamera';
+
+  if (!fotoData) placeholder.style.display = 'flex';
+}
+
+function ulangFoto() {
+  if (sedangMengirim) return;
+
+  fotoData = null;
+  preview.removeAttribute('src');
+  preview.style.display = 'none';
+  video.style.display = 'none';
+  placeholder.style.display = 'flex';
+  cameraInfo.innerHTML = 'Kamera belum aktif.<br>Tekan Aktifkan Kamera.';
+
+  matikanTrackSaja();
+
+  document.getElementById('btnFoto').disabled = true;
+  document.getElementById('btnCamera').textContent = 'Aktifkan Kamera';
+
+  hapusPesan();
+}
+
+function ambilGPS() {
+  return new Promise(function(resolve) {
+    if (!document.getElementById('pakaiGPS').checked) {
+      document.getElementById('gpsStatus').textContent =
+        'Pencatatan GPS dinonaktifkan.';
+      resolve(null);
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      document.getElementById('gpsStatus').textContent =
+        'Browser tidak mendukung GPS.';
+      resolve(null);
+      return;
+    }
+
+    document.getElementById('gpsStatus').textContent =
+      'Meminta izin lokasi...';
+
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        document.getElementById('gpsStatus').textContent =
+          'GPS tercatat. Akurasi sekitar ' +
+          Math.round(pos.coords.accuracy) + ' meter.';
+
+        resolve({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+          accuracy: pos.coords.accuracy
+        });
+      },
+      function() {
+        document.getElementById('gpsStatus').textContent =
+          'GPS tidak tersedia atau izin ditolak. Presensi dapat dilanjutkan.';
+        resolve(null);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  });
+}
+
+function buatId() {
+  if (window.crypto && crypto.randomUUID) {
+    return crypto.randomUUID().replace(/-/g, '');
+  }
+
+  return 'TX' + Date.now().toString(36) +
+    Math.random().toString(36).slice(2) +
+    Math.random().toString(36).slice(2);
+}
+
+function cekStatus(id) {
+  return new Promise(function(resolve) {
+    const callback = 'presensiCb_' + id;
+    const script = document.createElement('script');
+    let selesai = false;
+
+    const timer = setTimeout(function() {
+      bersihkan();
+      resolve(null);
+    }, 10000);
+
+    function bersihkan() {
+      if (selesai) return;
+      selesai = true;
+      clearTimeout(timer);
+      try { delete window[callback]; } catch (e) {}
+      script.remove();
+    }
+
+    window[callback] = function(data) {
+      bersihkan();
+      resolve(data);
+    };
+
+    script.onerror = function() {
+      bersihkan();
+      resolve(null);
+    };
+
+    const separator = API_URL.includes('?') ? '&' : '?';
+
+    script.src = API_URL + separator +
+      'action=status&id=' + encodeURIComponent(id) +
+      '&callback=' + encodeURIComponent(callback) +
+      '&_=' + Date.now();
+
+    document.body.appendChild(script);
+  });
+}
+
+async function tungguStatus(id) {
+  const batas = Date.now() + 90000;
+
+  while (Date.now() < batas) {
+    const hasil = await cekStatus(id);
+
+    if (hasil && hasil.status === 'success') return hasil;
+
+    if (hasil && hasil.status === 'error') {
+      throw new Error(hasil.pesan || 'Presensi gagal disimpan.');
+    }
+
+    await new Promise(function(resolve) {
+      setTimeout(resolve, 2500);
+    });
+  }
+
+  throw new Error(
+    'Status penyimpanan belum dapat dipastikan. Jangan langsung mengirim ulang; periksa Google Sheets terlebih dahulu.'
+  );
+}
+
+function aturTombol(kunci) {
+  document.getElementById('btnMasuk').disabled = kunci;
+  document.getElementById('btnPulang').disabled = kunci;
+  document.getElementById('btnFoto').disabled = kunci || !stream;
+  document.getElementById('btnCamera').disabled = kunci || kameraDiproses;
+}
+
+async function kirimPresensi(jenis) {
+  if (sedangMengirim) return;
+
+  try {
+    const nama = namaSekarang();
+
+    if (nama.length < 2) {
+      throw new Error('Masukkan nama lengkap terlebih dahulu.');
+    }
+
+    if (!fotoData) {
+      throw new Error('Aktifkan kamera dan ambil foto terlebih dahulu.');
+    }
+
+    hapusPesan();
+
+    sedangMengirim = true;
+    aturTombol(true);
+
+    tampilPesan('Memeriksa lokasi GPS...', 'info');
+    const gps = await ambilGPS();
+
+    const id = buatId();
+
+    const payload = {
+      id: id,
+      nama: nama,
+      jenis: jenis,
+      foto: fotoData,
+      gps: gps
+    };
+
+    tampilPesan(
+      'Mengirim foto dan menyimpan presensi. Jangan tutup halaman...',
+      'info'
+    );
+
+    /*
+     * Backend Apps Script memakai doPost(e).
+     * mode no-cors berarti respons POST tidak bisa dibaca.
+     * Hasil akhir diperiksa melalui endpoint JSONP status.
+     */
+    await fetch(API_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      redirect: 'follow',
+      headers: {
+        'Content-Type': 'text/plain;charset=UTF-8'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const hasil = await tungguStatus(id);
+
+    tampilPesan(
+      'Presensi ' + hasil.jenis.toLowerCase() +
+      ' BERHASIL. Nama: ' + hasil.nama +
+      '. Tanggal: ' + hasil.tanggal +
+      ', pukul ' + hasil.jam + ' WIB.',
+      'success'
+    );
+
+    fotoData = null;
+    preview.removeAttribute('src');
+    preview.style.display = 'none';
+    video.style.display = 'none';
+    placeholder.style.display = 'flex';
+    cameraInfo.textContent =
+      'Presensi tersimpan. Aktifkan kamera untuk foto berikutnya.';
+
+    matikanTrackSaja();
+
+  } catch (err) {
+    tampilPesan(
+      err && err.message ? err.message :
+      'Presensi gagal atau status belum dapat dipastikan.',
+      'error'
+    );
+
+  } finally {
+    sedangMengirim = false;
+    aturTombol(false);
+  }
+}
+
+window.addEventListener('pagehide', matikanKamera);
+</script>
+</body>
+</html>
