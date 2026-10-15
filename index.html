@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -214,20 +213,20 @@ button:disabled { opacity: .5; cursor: not-allowed; }
       <div class="hint">Waktu resmi presensi dicatat oleh server.</div>
     </div>
 
-    <label for="nama">Nama lengkap pegawai</label>
-    <input id="nama" type="text" maxlength="100"
-           placeholder="Contoh: Ahmad Mustaqim" autocomplete="name">
-    <div class="hint">Masukkan nama sesuai identitas pegawai.</div>
+    <label for="pin">PIN mengajar</label>
+    <input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="10"
+           placeholder="Masukkan PIN mengajar" autocomplete="off">
+    <div class="hint">Gunakan PIN yang sudah terdaftar di MASTER GURU MAPEL. Nama akan dikenali otomatis oleh server.</div>
 
     <div class="status-box">
       <div class="status-title">Status presensi hari ini</div>
       <div class="status-line">
         <span>Absen masuk</span>
-        <span id="statusMasuk" class="status-value">Isi nama terlebih dahulu</span>
+        <span id="statusMasuk" class="status-value">Masukkan PIN terlebih dahulu</span>
       </div>
       <div class="status-line">
         <span>Absen pulang</span>
-        <span id="statusPulang" class="status-value">Isi nama terlebih dahulu</span>
+        <span id="statusPulang" class="status-value">Masukkan PIN terlebih dahulu</span>
       </div>
     </div>
   </section>
@@ -287,6 +286,23 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     <div class="message" id="message" role="status" aria-live="polite"></div>
   </section>
 
+  <section class="card" id="rekapBulanan" style="margin-top:18px">
+    <h2 style="margin-top:0">📅 Lihat Presensi Guru</h2>
+    <p class="hint">Rekap bulanan presensi masuk dan pulang. Klik foto untuk membukanya.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0">
+      <label for="bulanRekap" style="margin:0">Bulan</label>
+      <input id="bulanRekap" type="month" style="max-width:210px;margin:0">
+      <button type="button" id="btnMuatRekap" onclick="muatRekap()" style="border:0;border-radius:10px;padding:11px 16px;background:#176b50;color:#fff;font-weight:700;cursor:pointer">Tampilkan Rekap</button>
+    </div>
+    <div id="statusRekap" class="hint" aria-live="polite">Pilih bulan lalu tekan Tampilkan Rekap.</div>
+    <div style="overflow-x:auto;margin-top:12px">
+      <table id="tabelRekap" style="width:100%;border-collapse:collapse;display:none">
+        <thead><tr style="background:#e8f4ee;text-align:left"><th style="padding:9px;border:1px solid #d5e3dc">Tanggal</th><th style="padding:9px;border:1px solid #d5e3dc">Nama Guru</th><th style="padding:9px;border:1px solid #d5e3dc">Masuk</th><th style="padding:9px;border:1px solid #d5e3dc">Foto Masuk</th><th style="padding:9px;border:1px solid #d5e3dc">Pulang</th><th style="padding:9px;border:1px solid #d5e3dc">Foto Pulang</th></tr></thead>
+        <tbody id="isiRekap"></tbody>
+      </table>
+    </div>
+  </section>
+
   <footer class="footer">
     Presensi Guru dan Tenaga Kependidikan<br>
     Data presensi: Google Sheets · Foto: Google Drive
@@ -322,9 +338,8 @@ function hapusPesan() {
   el.textContent = '';
 }
 
-function namaSekarang() {
-  return document.getElementById('nama')
-    .value.trim().replace(/\s+/g, ' ');
+function pinSekarang() {
+  return document.getElementById('pin').value.trim();
 }
 
 function perbaruiJam() {
@@ -684,10 +699,10 @@ async function kirimPresensi(jenis) {
   if (sedangMengirim) return;
 
   try {
-    const nama = namaSekarang();
+    const pin = pinSekarang();
 
-    if (nama.length < 2) {
-      throw new Error('Masukkan nama lengkap terlebih dahulu.');
+    if (!/^\d{4,10}$/.test(pin)) {
+      throw new Error('Masukkan PIN mengajar 4–10 angka.');
     }
 
     if (!fotoData) {
@@ -706,7 +721,7 @@ async function kirimPresensi(jenis) {
 
     const payload = {
       id: id,
-      nama: nama,
+      pin: pin,
       jenis: jenis,
       foto: fotoData,
       gps: gps
@@ -763,6 +778,76 @@ async function kirimPresensi(jenis) {
     sedangMengirim = false;
     aturTombol(false);
   }
+}
+
+function bulanLokalDefault() {
+  const now = new Date();
+  return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+}
+
+function escapeHtmlRekap(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, function(ch) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+  });
+}
+
+function ambilRekapJSONP(bulan) {
+  return new Promise(function(resolve, reject) {
+    const callback = 'cbRekap_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+    const script = document.createElement('script');
+    const timer = setTimeout(function() { bersih(); reject(new Error('Waktu tunggu rekap habis.')); }, 20000);
+    function bersih() {
+      clearTimeout(timer);
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[callback]; } catch (e) { window[callback] = undefined; }
+    }
+    window[callback] = function(data) { bersih(); resolve(data); };
+    script.onerror = function() { bersih(); reject(new Error('Rekap tidak dapat diakses.')); };
+    const separator = API_URL.includes('?') ? '&' : '?';
+    script.src = API_URL + separator + 'action=rekap&bulan=' + encodeURIComponent(bulan) + '&callback=' + encodeURIComponent(callback) + '&_=' + Date.now();
+    document.body.appendChild(script);
+  });
+}
+
+async function muatRekap() {
+  const bulan = document.getElementById('bulanRekap').value;
+  const status = document.getElementById('statusRekap');
+  const tabel = document.getElementById('tabelRekap');
+  const isi = document.getElementById('isiRekap');
+  if (!/^\d{4}-\d{2}$/.test(bulan)) { status.textContent = 'Pilih bulan terlebih dahulu.'; return; }
+  status.textContent = 'Memuat rekap...';
+  tabel.style.display = 'none';
+  isi.innerHTML = '';
+  try {
+    const hasil = await ambilRekapJSONP(bulan);
+    if (!hasil || hasil.status !== 'success') throw new Error(hasil && hasil.pesan ? hasil.pesan : 'Gagal memuat rekap.');
+    if (!hasil.data || !hasil.data.length) { status.textContent = 'Belum ada presensi pada bulan ini.'; return; }
+    isi.innerHTML = hasil.data.map(function(r) {
+      const tanggal = escapeHtmlRekap(r.tanggal);
+      const nama = escapeHtmlRekap(r.nama);
+      function linkFoto(url, label) {
+        if (!url || !/^https:\/\//i.test(String(url))) return '<span style="color:#888">—</span>';
+        const safe = escapeHtmlRekap(url);
+        return '<a href="' + safe + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+      }
+      return '<tr><td style="padding:9px;border:1px solid #d5e3dc;white-space:nowrap">' + tanggal + '</td>' +
+        '<td style="padding:9px;border:1px solid #d5e3dc">' + nama + '</td>' +
+        '<td style="padding:9px;border:1px solid #d5e3dc;white-space:nowrap">' + escapeHtmlRekap(r.masuk || '—') + '</td>' +
+        '<td style="padding:9px;border:1px solid #d5e3dc">' + linkFoto(r.fotoMasuk, '📷 Lihat foto') + '</td>' +
+        '<td style="padding:9px;border:1px solid #d5e3dc;white-space:nowrap">' + escapeHtmlRekap(r.pulang || '—') + '</td>' +
+        '<td style="padding:9px;border:1px solid #d5e3dc">' + linkFoto(r.fotoPulang, '📷 Lihat foto') + '</td></tr>';
+    }).join('');
+    tabel.style.display = 'table';
+    status.textContent = 'Rekap ' + bulan + ': ' + hasil.data.length + ' catatan guru/hari.';
+  } catch (err) {
+    status.textContent = err && err.message ? err.message : 'Gagal memuat rekap.';
+  }
+}
+
+document.getElementById('bulanRekap').value = bulanLokalDefault();
+if (new URLSearchParams(window.location.search).get('view') === 'rekap') {
+  document.getElementById('rekapBulanan').scrollIntoView({behavior:'smooth'});
+  muatRekap();
 }
 
 window.addEventListener('pagehide', matikanKamera);
