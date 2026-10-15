@@ -146,6 +146,14 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .primary { background: var(--green); color: white; }
 .masuk { background: var(--green); color: white; }
 .pulang { background: #2456a6; color: white; }
+.session-schedule { display:grid; gap:9px; margin-top:15px; }
+.session-item { display:grid; grid-template-columns:1fr auto; gap:4px 10px; padding:11px 12px; border:1px solid var(--border); border-radius:11px; background:#fbfdfc; font-size:13px; }
+.session-item strong { font-size:13px; }
+.session-item span { font-weight:700; color:var(--green); white-space:nowrap; }
+.session-item small { grid-column:1 / -1; color:var(--muted); font-size:11px; }
+.session-item.night { background:#f8f3ff; border-color:#e7d8fb; }
+.session-item.night span { color:#7e22ce; }
+.night-button { background:#7e22ce; color:white; grid-column:1 / -1; }
 
 .gps {
   display: flex;
@@ -228,6 +236,11 @@ button:disabled { opacity: .5; cursor: not-allowed; }
         <span>Absen pulang</span>
         <span id="statusPulang" class="status-value">Masukkan PIN terlebih dahulu</span>
       </div>
+      <div class="session-schedule" aria-label="Jadwal sesi presensi">
+        <div class="session-item"><strong>🌅 Masuk pagi</strong><span>07.00–08.30 WIB</span><small id="jadwalMasuk">Memeriksa jadwal…</small></div>
+        <div class="session-item"><strong>🌇 Pulang sore</strong><span>16.00–17.30 WIB</span><small id="jadwalPulang">Memeriksa jadwal…</small></div>
+        <div class="session-item night"><strong>🌙 Kontrol mengajar malam</strong><span>20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
+      </div>
     </div>
   </section>
 
@@ -281,6 +294,8 @@ button:disabled { opacity: .5; cursor: not-allowed; }
               onclick="kirimPresensi('Masuk')">✓ ABSEN MASUK</button>
       <button type="button" class="pulang" id="btnPulang"
               onclick="kirimPresensi('Pulang')">⇥ ABSEN PULANG</button>
+      <button type="button" class="night-button" id="btnMalam"
+              onclick="kirimPresensi('Kontrol Mengajar Malam')">🌙 KONTROL MENGAJAR MALAM</button>
     </div>
 
     <div class="message" id="message" role="status" aria-live="polite"></div>
@@ -344,24 +359,26 @@ function pinSekarang() {
 
 function perbaruiJam() {
   const now = new Date();
-
-  document.getElementById('clockTime').textContent =
-    now.toLocaleTimeString('id-ID', {
-      timeZone: 'Asia/Jakarta',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
-
-  document.getElementById('clockDate').textContent =
-    now.toLocaleDateString('id-ID', {
-      timeZone: 'Asia/Jakarta',
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+  const opsiWaktu = {timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false};
+  const waktu = now.toLocaleTimeString('id-ID', opsiWaktu);
+  document.getElementById('clockTime').textContent = waktu;
+  document.getElementById('clockDate').textContent = now.toLocaleDateString('id-ID', {
+    timeZone:'Asia/Jakarta', weekday:'long', day:'numeric', month:'long', year:'numeric'
+  });
+  const bagian = waktu.split(':').map(Number);
+  const menit = bagian[0] * 60 + bagian[1];
+  const sesi = [
+    {jenis:'Masuk', id:'btnMasuk', label:'jadwalMasuk', awal:7*60, akhir:8*60+30, nama:'Masuk pagi'},
+    {jenis:'Pulang', id:'btnPulang', label:'jadwalPulang', awal:16*60, akhir:17*60+30, nama:'Pulang sore'},
+    {jenis:'Kontrol Mengajar Malam', id:'btnMalam', label:'jadwalMalam', awal:20*60, akhir:21*60+30, nama:'Kontrol mengajar malam'}
+  ];
+  sesi.forEach(function(s) {
+    const aktif = menit >= s.awal && menit <= s.akhir;
+    const tombol = document.getElementById(s.id);
+    if (tombol && !sedangMengirim) tombol.disabled = !aktif;
+    const status = document.getElementById(s.label);
+    if (status) status.textContent = aktif ? 'Sesi sedang dibuka.' : (menit < s.awal ? 'Belum dibuka.' : 'Sesi sudah ditutup.');
+  });
 }
 
 perbaruiJam();
@@ -691,6 +708,7 @@ async function tungguStatus(id) {
 function aturTombol(kunci) {
   document.getElementById('btnMasuk').disabled = kunci;
   document.getElementById('btnPulang').disabled = kunci;
+  document.getElementById('btnMalam').disabled = kunci;
   document.getElementById('btnFoto').disabled = kunci || !stream;
   document.getElementById('btnCamera').disabled = kunci || kameraDiproses;
 }
@@ -703,6 +721,18 @@ async function kirimPresensi(jenis) {
 
     if (!/^\d{4,10}$/.test(pin)) {
       throw new Error('Masukkan PIN mengajar 4–10 angka.');
+    }
+
+    const sekarangWIB = new Date().toLocaleTimeString('en-GB', {timeZone:'Asia/Jakarta', hour:'2-digit', minute:'2-digit', hour12:false});
+    const bagianJam = sekarangWIB.split(':').map(Number);
+    const menitSekarang = bagianJam[0] * 60 + bagianJam[1];
+    const batasSesi = {
+      'Masuk':[420,510,'07.00–08.30 WIB'],
+      'Pulang':[960,1050,'16.00–17.30 WIB'],
+      'Kontrol Mengajar Malam':[1200,1290,'20.00–21.30 WIB']
+    }[jenis];
+    if (!batasSesi || menitSekarang < batasSesi[0] || menitSekarang > batasSesi[1]) {
+      throw new Error('Sesi ' + jenis + ' hanya dibuka pukul ' + (batasSesi ? batasSesi[2] : 'sesuai jadwal') + '. Server akan memeriksa kembali waktu resmi.');
     }
 
     if (!fotoData) {
