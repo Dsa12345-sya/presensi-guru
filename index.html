@@ -668,6 +668,25 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
   .attendance button { min-height: 58px !important; font-size: 14px !important; }
 }
 
+
+/* PERUBAHAN TERBATAS: perbesar ikon sesi dan tulisan rentang jam saja */
+.session-item strong .session-icon {
+  display: inline-block !important;
+  font-size: 34px !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+  margin-right: 5px !important;
+}
+.session-item .session-time {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+@media (max-width: 699px) {
+  .session-item strong .session-icon { font-size: 32px !important; }
+  .session-item .session-time { font-size: 17px !important; }
+}
+
 </style>
 </head>
 
@@ -756,9 +775,9 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
         <span id="statusPulang" class="status-value">Masukkan PIN terlebih dahulu</span>
       </div>
       <div class="session-schedule" aria-label="Jadwal sesi presensi">
-        <div class="session-item"><strong>🌅 Masuk pagi</strong><span>07.00–08.30 WIB</span><small id="jadwalMasuk">Memeriksa jadwal…</small></div>
-        <div class="session-item"><strong>🌇 Pulang sore</strong><span>16.00–17.30 WIB</span><small id="jadwalPulang">Memeriksa jadwal…</small></div>
-        <div class="session-item night"><strong>🌙 Kontrol mengajar malam</strong><span>20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
+        <div class="session-item"><strong><span class="session-icon" aria-hidden="true">🌅</span> Masuk pagi</strong><span class="session-time">07.00–08.30 WIB</span><small id="jadwalMasuk">Memeriksa jadwal…</small></div>
+        <div class="session-item"><strong><span class="session-icon" aria-hidden="true">🌇</span> Pulang sore</strong><span class="session-time">16.00–17.30 WIB</span><small id="jadwalPulang">Memeriksa jadwal…</small></div>
+        <div class="session-item night"><strong><span class="session-icon" aria-hidden="true">🌙</span> Kontrol mengajar malam</strong><span class="session-time">20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
       </div>
     </div>
     <div class="gps">
