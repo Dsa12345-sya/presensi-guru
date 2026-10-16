@@ -605,18 +605,25 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
 .session-item span:not(.schedule-icon):not(.schedule-name) { font-weight:800; }
 @media(max-width:699px) { .session-item .schedule-icon { flex-basis:42px; width:42px; height:42px; font-size:34px; } }
 
-/* Penyempurnaan visual: kartu jadwal lebih besar dan ilustrasi guru bergamis */
+/* Penyempurnaan visual: ikon jadwal besar memenuhi ruang kartu */
 .header-brand-icon { width:88px !important; height:88px !important; padding:3px; overflow:hidden; }
 .teacher-illustration { display:block; width:100%; height:100%; }
 .session-schedule { gap:11px !important; margin-top:14px !important; }
-.session-item { min-height:122px !important; padding:16px 14px !important; gap:9px !important; }
-.session-item strong { font-size:clamp(14px,1.05vw,17px) !important; line-height:1.3; }
-.session-item strong:first-letter { font-size:24px !important; }
-.session-item span { font-size:clamp(13px,1vw,15px) !important; line-height:1.3; }
+.session-item { min-height:142px !important; padding:16px 14px !important; gap:10px !important; }
+.session-item strong { display:flex !important; align-items:center !important; gap:14px !important; font-size:clamp(14px,1.05vw,17px) !important; line-height:1.3; min-height:70px; }
+.session-item .schedule-icon { flex:0 0 72px !important; width:72px !important; height:72px !important; font-size:64px !important; line-height:1 !important; justify-content:center; }
+.session-item .schedule-name { font-size:clamp(14px,1.05vw,17px) !important; }
+.session-item span:not(.schedule-icon):not(.schedule-name) { font-size:clamp(13px,1vw,15px) !important; line-height:1.3; }
 .session-item small { font-size:12px !important; line-height:1.4; }
 @media(max-width:950px) {
   .header-brand-icon { width:64px !important; height:64px !important; }
-  .session-item { min-height:108px !important; }
+  .session-item { min-height:126px !important; }
+  .session-item .schedule-icon { flex-basis:58px !important; width:58px !important; height:58px !important; font-size:50px !important; }
+  .session-item strong { gap:10px !important; min-height:58px; }
+}
+@media(max-width:699px) {
+  .session-item { min-height:112px !important; }
+  .session-item .schedule-icon { flex-basis:54px !important; width:54px !important; height:54px !important; font-size:46px !important; }
 }
 @media(max-width:699px) {
   .header-brand-icon { width:52px !important; height:52px !important; }
