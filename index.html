@@ -526,6 +526,51 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
  #bulanRekap,#btnMuatRekap { width:100% !important; max-width:none !important; }
 }
 
+
+/* PERBAIKAN AKHIR: GPS berada di panel kanan dan rekap memenuhi lebar */
+@media (min-width: 800px) {
+  .info-panel > .card > .gps {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    align-self: stretch;
+  }
+}
+#rekapBulanan {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  clear: both !important;
+}
+#rekapBulanan > h2,
+#rekapBulanan > p,
+#rekapBulanan > div {
+  width: 100% !important;
+  max-width: none !important;
+}
+#rekapBulanan > div:first-of-type {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+}
+#rekapBulanan > div[style*="overflow-x:auto"] {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  overflow-x: auto !important;
+}
+#tabelRekap {
+  display: table;
+  width: 100% !important;
+  min-width: 1050px !important;
+  table-layout: auto !important;
+}
+@media (max-width: 799px) {
+  .info-panel > .card > .gps { width: 100% !important; margin: 0 !important; }
+  #rekapBulanan { width: 100% !important; }
+}
+
 </style>
 </head>
 
@@ -619,10 +664,7 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
         <div class="session-item night"><strong>🌙 Kontrol mengajar malam</strong><span>20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
       </div>
     </div>
-  </section>
-  </div>
-</div>
-<div class="gps">
+    <div class="gps">
       <input type="checkbox" id="pakaiGPS" checked>
       <div>
         <div class="gps-title">Catat lokasi GPS jika diizinkan</div>
@@ -631,6 +673,9 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
         </div>
       </div>
     </div>
+  </section>
+  </div>
+</div>
 <div class="attendance">
       <button type="button" class="masuk" id="btnMasuk"
               onclick="kirimPresensi('Masuk')">✓ ABSEN MASUK</button>
