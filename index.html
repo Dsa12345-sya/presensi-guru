@@ -315,6 +315,86 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
  .attendance .night-button { grid-column:1; }
 }
 
+
+
+/* FINAL DESKTOP LAYOUT: lebar penuh, kamera besar, panel kanan lebih padat */
+@media (min-width: 800px) {
+  .container {
+    width: min(calc(100% - 40px), 1480px) !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) !important;
+    column-gap: 18px !important;
+    row-gap: 0 !important;
+    align-items: start !important;
+  }
+  .header {
+    padding: 24px 28px !important;
+    margin-bottom: 12px !important;
+    min-height: 112px;
+  }
+  .container > .card:first-of-type {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-areas:
+      "clock pinlabel"
+      "clock pininput"
+      "clock pinhint"
+      "status status" !important;
+    gap: 10px 14px !important;
+    align-content: start !important;
+    padding: 18px !important;
+  }
+  .container > .card:first-of-type > .clock {
+    grid-area: clock;
+    margin: 0 !important;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .container > .card:first-of-type > label { grid-area: pinlabel; margin: 0 0 -6px !important; align-self: end; }
+  .container > .card:first-of-type > input#pin { grid-area: pininput; min-height: 44px; }
+  .container > .card:first-of-type > .hint { grid-area: pinhint; margin: -5px 0 0 !important; }
+  .container > .card:first-of-type > .status-box { grid-area: status; margin-top: 2px !important; padding: 12px !important; }
+  .session-schedule {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .session-item {
+    grid-template-columns: 1fr !important;
+    align-content: start;
+    gap: 6px !important;
+    min-height: 92px;
+    padding: 10px !important;
+  }
+  .session-item span { white-space: normal !important; }
+  .session-item small { grid-column: 1 !important; }
+  .container > .card:nth-of-type(2) > .camera {
+    width: 100% !important;
+    aspect-ratio: 4 / 3 !important;
+    min-height: 360px;
+  }
+  .container > .card:nth-of-type(2) > .actions {
+    grid-column: 1 !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .container > .card:nth-of-type(2) > .gps {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+    align-self: end;
+  }
+  .container > .card:nth-of-type(2) > .attendance {
+    grid-area: actions !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    margin: 16px 0 !important;
+  }
+  #rekapBulanan { margin-top: 0 !important; }
+}
+@media (max-width: 799px) {
+  .container { width: calc(100% - 18px) !important; }
+  .session-schedule { grid-template-columns: 1fr !important; }
+  .container > .card:nth-of-type(2) > .camera { min-height: 0; }
+}
+
 </style>
 </head>
 
@@ -448,7 +528,7 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
  * URL BACKEND APPS SCRIPT MILIK BRO.
  * Tidak perlu mengubah URL ini lagi.
  */
-const API_URL = 'https://script.google.com/macros/s/AKfycbzlmkQfKM8eg5v22k-Pb7oRCSLsFXeWwDZvUcmXUJ_ze7nMewofSjIULbDUmPIzhQrTzA/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzL5AzchxyUImdn0k_0Rr_tzDJlogxMElaFLpk7GM2kcIQD9nC2oHWskuhPWb8Lj5SG5g/exec';
 
 let stream = null;
 let fotoData = null;
