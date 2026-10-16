@@ -597,6 +597,77 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
   #rekapBulanan { width: 100% !important; }
 }
 
+
+
+/* PENYEMPURNAAN FINAL: header, ikon, dan jam dibuat lebih besar dan jelas */
+.info-panel .header {
+  min-height: 145px !important;
+  padding: 24px 26px !important;
+  gap: 18px !important;
+  border-radius: 20px !important;
+  background: linear-gradient(120deg,#087c55,#075b43) !important;
+  box-shadow: 0 10px 26px #075b4325 !important;
+}
+.header-brand-icon {
+  width: 88px !important; height: 88px !important;
+  font-size: 62px !important; border-radius: 20px !important;
+}
+.info-panel .header h1 { font-size: clamp(28px, 3vw, 42px) !important; }
+.info-panel .header .subtitle { font-size: clamp(15px, 1.45vw, 20px) !important; }
+.header-tagline { font-size: clamp(12px, 1.1vw, 15px) !important; }
+.header-date { min-width: 175px !important; padding: 14px 16px !important; gap: 12px !important; }
+.header-calendar { font-size: 38px !important; }
+.header-date b { font-size: 16px !important; }
+.header-date small { font-size: 14px !important; }
+.info-panel .clock {
+  min-height: 164px !important; padding: 24px !important; gap: 20px !important;
+  border-radius: 17px !important;
+}
+.clock-icon {
+  flex-basis: 82px !important; width: 82px !important; height: 82px !important;
+  border-radius: 20px !important; font-size: 64px !important;
+}
+.clock-time { font-size: clamp(40px, 4vw, 56px) !important; font-weight: 850 !important; }
+.clock-date { font-size: 16px !important; margin-top: 8px !important; }
+.clock .hint { font-size: 12px !important; margin-top: 7px !important; }
+.pin-icon { flex-basis: 62px !important; width: 62px !important; height: 62px !important; font-size: 35px !important; }
+.pin-fields label { font-size: 17px !important; }
+.pin-fields input#pin { min-height: 50px !important; font-size: 18px !important; }
+.info-panel .status-box { padding: 16px !important; }
+.status-title { font-size: 16px !important; }
+.status-line { font-size: 14px !important; }
+.session-item { min-height: 116px !important; padding: 15px !important; gap: 9px !important; }
+.session-item strong { font-size: 16px !important; line-height: 1.35 !important; }
+.session-item strong:first-letter { font-size: 23px !important; }
+.session-item span { font-size: 14px !important; }
+.session-item small { font-size: 12px !important; }
+.attendance button { min-height: 68px !important; font-size: clamp(14px, 1.3vw, 18px) !important; font-weight: 800 !important; }
+.camera-panel .actions button { min-height: 52px !important; font-size: clamp(12px, 1.05vw, 15px) !important; }
+@media (max-width: 950px) {
+  .info-panel .header { min-height: 0 !important; padding: 20px !important; }
+  .header-brand-icon { width: 66px !important; height: 66px !important; font-size: 46px !important; }
+  .header-date b { font-size: 14px !important; }
+  .header-date small { font-size: 12px !important; }
+  .info-panel .clock { min-height: 145px !important; padding: 20px !important; }
+  .clock-time { font-size: clamp(38px, 5vw, 50px) !important; }
+}
+@media (max-width: 699px) {
+  .info-panel .header { grid-template-columns: 58px minmax(0,1fr) !important; padding: 16px !important; gap: 11px !important; }
+  .header-brand-icon { width: 56px !important; height: 56px !important; font-size: 39px !important; }
+  .info-panel .header h1 { font-size: 25px !important; }
+  .info-panel .header .subtitle { font-size: 14px !important; }
+  .header-tagline { font-size: 11px !important; }
+  .header-date { grid-column: 1 / -1 !important; min-width: 0 !important; width: 100% !important; }
+  .info-panel .clock { min-height: 142px !important; padding: 18px !important; gap: 14px !important; }
+  .clock-icon { flex-basis: 62px !important; width: 62px !important; height: 62px !important; font-size: 48px !important; }
+  .clock-time { font-size: clamp(34px, 9vw, 44px) !important; }
+  .clock-date { font-size: 14px !important; }
+  .clock .hint { font-size: 11px !important; }
+  .session-item { min-height: 0 !important; padding: 14px !important; }
+  .session-item strong { font-size: 15px !important; }
+  .attendance button { min-height: 58px !important; font-size: 14px !important; }
+}
+
 </style>
 </head>
 
