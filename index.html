@@ -150,7 +150,6 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .session-schedule { display:grid; gap:9px; margin-top:15px; }
 .session-item { display:grid; grid-template-columns:1fr auto; gap:4px 10px; padding:11px 12px; border:1px solid var(--border); border-radius:11px; background:#fbfdfc; font-size:13px; }
 .session-item strong { font-size:13px; }
-.session-emoji { font-size: 30px; line-height: 1; vertical-align: middle; display: inline-block; margin-right: 3px; }
 .session-item span { font-weight:700; color:var(--green); white-space:nowrap; }
 .session-item small { grid-column:1 / -1; color:var(--muted); font-size:11px; }
 .session-item.night { background:#f8f3ff; border-color:#e7d8fb; }
@@ -451,10 +450,10 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
 .header-date b { font-size:14px; text-transform:capitalize; }
 .header-date small { margin-top:4px; font-size:12px; color:#e0fff0; }
 .info-panel > .card { padding:16px !important; border:1px solid var(--border) !important; border-radius:18px !important; display:grid !important; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) !important; grid-template-areas:"clock pin" "status status" !important; gap:12px !important; align-content:start; }
-.info-panel .clock { grid-area:clock; margin:0 !important; padding:14px !important; display:flex; align-items:center; justify-content:center; gap:13px; text-align:left; min-height:98px; background:linear-gradient(135deg,#e5f7ee,#eef8ff); border:0; border-radius:14px; }
-.clock-icon { flex:0 0 54px; height:54px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:#d5f2e4; color:#087c55; font-size:44px; font-weight:700; }
+.info-panel .clock { grid-area:clock; margin:0 !important; padding:18px !important; display:flex; align-items:center; justify-content:center; gap:16px; text-align:left; min-height:120px; background:linear-gradient(135deg,#e5f7ee,#eef8ff); border:0; border-radius:14px; }
+.clock-icon { flex:0 0 66px; width:66px; height:66px; display:flex; align-items:center; justify-content:center; border-radius:17px; background:#d5f2e4; color:#087c55; font-size:52px; font-weight:700; }
 .clock-content { min-width:0; }
-.clock-time { font-size:clamp(25px,2.6vw,38px) !important; line-height:1.1; letter-spacing:0 !important; }
+.clock-time { font-size:clamp(30px,3.1vw,44px) !important; line-height:1.1; letter-spacing:0 !important; }
 .clock-date { margin-top:6px; font-size:13px; }
 .clock .hint { margin-top:5px !important; font-size:10px; }
 .pin-panel { grid-area:pin; display:flex; align-items:center; gap:12px; padding:12px; min-width:0; border-radius:14px; background:#f0f8f4; }
@@ -469,7 +468,6 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
 .session-schedule { grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:9px !important; margin-top:13px !important; }
 .session-item { grid-template-columns:1fr !important; gap:7px !important; min-height:100px; padding:12px !important; border-radius:12px !important; background:#f2faf6; }
 .session-item strong { font-size:13px; }
-.session-emoji { font-size: 30px; line-height: 1; vertical-align: middle; display: inline-block; margin-right: 3px; }
 .session-item strong:first-letter { font-size:18px; }
 .session-item span { white-space:normal !important; font-size:12px; }
 .session-item small { grid-column:1 !important; font-size:11px; }
@@ -600,13 +598,93 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
 }
 
 
-/* PERBAIKAN KHUSUS: ikon pada tiga kartu sesi dibuat jauh lebih besar */
-.session-item .session-emoji {
-  font-size: 48px !important;
+
+/* PENYEMPURNAAN FINAL: header, ikon, dan jam dibuat lebih besar dan jelas */
+.info-panel .header {
+  min-height: 145px !important;
+  padding: 24px 26px !important;
+  gap: 18px !important;
+  border-radius: 20px !important;
+  background: linear-gradient(120deg,#087c55,#075b43) !important;
+  box-shadow: 0 10px 26px #075b4325 !important;
+}
+.header-brand-icon {
+  width: 88px !important; height: 88px !important;
+  font-size: 62px !important; border-radius: 20px !important;
+}
+.info-panel .header h1 { font-size: clamp(28px, 3vw, 42px) !important; }
+.info-panel .header .subtitle { font-size: clamp(15px, 1.45vw, 20px) !important; }
+.header-tagline { font-size: clamp(12px, 1.1vw, 15px) !important; }
+.header-date { min-width: 175px !important; padding: 14px 16px !important; gap: 12px !important; }
+.header-calendar { font-size: 38px !important; }
+.header-date b { font-size: 16px !important; }
+.header-date small { font-size: 14px !important; }
+.info-panel .clock {
+  min-height: 164px !important; padding: 24px !important; gap: 20px !important;
+  border-radius: 17px !important;
+}
+.clock-icon {
+  flex-basis: 82px !important; width: 82px !important; height: 82px !important;
+  border-radius: 20px !important; font-size: 64px !important;
+}
+.clock-time { font-size: clamp(40px, 4vw, 56px) !important; font-weight: 850 !important; }
+.clock-date { font-size: 16px !important; margin-top: 8px !important; }
+.clock .hint { font-size: 12px !important; margin-top: 7px !important; }
+.pin-icon { flex-basis: 62px !important; width: 62px !important; height: 62px !important; font-size: 35px !important; }
+.pin-fields label { font-size: 17px !important; }
+.pin-fields input#pin { min-height: 50px !important; font-size: 18px !important; }
+.info-panel .status-box { padding: 16px !important; }
+.status-title { font-size: 16px !important; }
+.status-line { font-size: 14px !important; }
+.session-item { min-height: 116px !important; padding: 15px !important; gap: 9px !important; }
+.session-item strong { font-size: 16px !important; line-height: 1.35 !important; }
+.session-item strong:first-letter { font-size: 23px !important; }
+.session-item span { font-size: 14px !important; }
+.session-item small { font-size: 12px !important; }
+.attendance button { min-height: 68px !important; font-size: clamp(14px, 1.3vw, 18px) !important; font-weight: 800 !important; }
+.camera-panel .actions button { min-height: 52px !important; font-size: clamp(12px, 1.05vw, 15px) !important; }
+@media (max-width: 950px) {
+  .info-panel .header { min-height: 0 !important; padding: 20px !important; }
+  .header-brand-icon { width: 66px !important; height: 66px !important; font-size: 46px !important; }
+  .header-date b { font-size: 14px !important; }
+  .header-date small { font-size: 12px !important; }
+  .info-panel .clock { min-height: 145px !important; padding: 20px !important; }
+  .clock-time { font-size: clamp(38px, 5vw, 50px) !important; }
+}
+@media (max-width: 699px) {
+  .info-panel .header { grid-template-columns: 58px minmax(0,1fr) !important; padding: 16px !important; gap: 11px !important; }
+  .header-brand-icon { width: 56px !important; height: 56px !important; font-size: 39px !important; }
+  .info-panel .header h1 { font-size: 25px !important; }
+  .info-panel .header .subtitle { font-size: 14px !important; }
+  .header-tagline { font-size: 11px !important; }
+  .header-date { grid-column: 1 / -1 !important; min-width: 0 !important; width: 100% !important; }
+  .info-panel .clock { min-height: 142px !important; padding: 18px !important; gap: 14px !important; }
+  .clock-icon { flex-basis: 62px !important; width: 62px !important; height: 62px !important; font-size: 48px !important; }
+  .clock-time { font-size: clamp(34px, 9vw, 44px) !important; }
+  .clock-date { font-size: 14px !important; }
+  .clock .hint { font-size: 11px !important; }
+  .session-item { min-height: 0 !important; padding: 14px !important; }
+  .session-item strong { font-size: 15px !important; }
+  .attendance button { min-height: 58px !important; font-size: 14px !important; }
+}
+
+
+/* PERUBAHAN TERBATAS: perbesar ikon sesi dan tulisan rentang jam saja */
+.session-item strong .session-icon {
+  display: inline-block !important;
+  font-size: 34px !important;
   line-height: 1 !important;
   vertical-align: middle !important;
-  display: inline-block !important;
-  margin-right: 7px !important;
+  margin-right: 5px !important;
+}
+.session-item .session-time {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+@media (max-width: 699px) {
+  .session-item strong .session-icon { font-size: 32px !important; }
+  .session-item .session-time { font-size: 17px !important; }
 }
 
 </style>
@@ -697,17 +775,17 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
         <span id="statusPulang" class="status-value">Masukkan PIN terlebih dahulu</span>
       </div>
       <div class="session-schedule" aria-label="Jadwal sesi presensi">
-        <div class="session-item"><strong><span class="session-emoji">🌅</span> Masuk pagi</strong><span>07.00–08.30 WIB</span><small id="jadwalMasuk">Memeriksa jadwal…</small></div>
-        <div class="session-item"><strong><span class="session-emoji">🌇</span> Pulang sore</strong><span>16.00–17.30 WIB</span><small id="jadwalPulang">Memeriksa jadwal…</small></div>
-        <div class="session-item night"><strong><span class="session-emoji">🌙</span> Kontrol mengajar malam</strong><span>20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
+        <div class="session-item"><strong><span class="session-icon" aria-hidden="true">🌅</span> Masuk pagi</strong><span class="session-time">07.00–08.30 WIB</span><small id="jadwalMasuk">Memeriksa jadwal…</small></div>
+        <div class="session-item"><strong><span class="session-icon" aria-hidden="true">🌇</span> Pulang sore</strong><span class="session-time">16.00–17.30 WIB</span><small id="jadwalPulang">Memeriksa jadwal…</small></div>
+        <div class="session-item night"><strong><span class="session-icon" aria-hidden="true">🌙</span> Kontrol mengajar malam</strong><span class="session-time">20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
       </div>
     </div>
     <div class="gps">
-      <input type="checkbox" id="pakaiGPS" checked>
+      <div aria-hidden="true" style="font-size:28px">📍</div>
       <div>
-        <div class="gps-title">Catat lokasi GPS jika diizinkan</div>
+        <div class="gps-title">GPS wajib aktif — lokasi pesantren</div>
         <div class="gps-detail" id="gpsStatus">
-          Lokasi opsional. Browser akan meminta izin jika diperlukan.
+          Presensi hanya dapat dikirim jika lokasi diizinkan dan berada dalam radius 100 meter dari pesantren.
         </div>
       </div>
     </div>
@@ -1050,48 +1128,55 @@ function ulangFoto() {
 }
 
 function ambilGPS() {
-  return new Promise(function(resolve) {
-    if (!document.getElementById('pakaiGPS').checked) {
-      document.getElementById('gpsStatus').textContent =
-        'Pencatatan GPS dinonaktifkan.';
-      resolve(null);
-      return;
-    }
-
+  return new Promise(function(resolve, reject) {
     if (!navigator.geolocation) {
-      document.getElementById('gpsStatus').textContent =
-        'Browser tidak mendukung GPS.';
-      resolve(null);
+      document.getElementById('gpsStatus').textContent = 'Browser tidak mendukung lokasi GPS. Presensi diblokir.';
+      reject(new Error('Browser tidak mendukung GPS. Gunakan browser yang mendukung lokasi.'));
       return;
     }
 
-    document.getElementById('gpsStatus').textContent =
-      'Meminta izin lokasi...';
-
+    document.getElementById('gpsStatus').textContent = 'Meminta izin lokasi presisi...';
     navigator.geolocation.getCurrentPosition(
       function(pos) {
-        document.getElementById('gpsStatus').textContent =
-          'GPS tercatat. Akurasi sekitar ' +
-          Math.round(pos.coords.accuracy) + ' meter.';
-
-        resolve({
+        const gps = {
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
           accuracy: pos.coords.accuracy
-        });
+        };
+        const jarak = jarakKePesantren(gps.latitude, gps.longitude);
+        if (gps.accuracy > 100) {
+          document.getElementById('gpsStatus').textContent = 'Akurasi GPS terlalu rendah (' + Math.round(gps.accuracy) + ' m). Coba aktifkan lokasi presisi.';
+          reject(new Error('Akurasi GPS harus 100 meter atau lebih baik. Coba aktifkan lokasi presisi lalu ulangi.'));
+          return;
+        }
+        if (jarak > 100) {
+          document.getElementById('gpsStatus').textContent = 'Di luar area pesantren: sekitar ' + Math.round(jarak) + ' meter.';
+          reject(new Error('Lokasi Anda di luar area pesantren. Presensi hanya bisa dilakukan dalam radius 100 meter.'));
+          return;
+        }
+        document.getElementById('gpsStatus').textContent = 'Lokasi terverifikasi sekitar ' + Math.round(jarak) + ' meter dari pesantren; akurasi ' + Math.round(gps.accuracy) + ' meter.';
+        resolve(gps);
       },
-      function() {
-        document.getElementById('gpsStatus').textContent =
-          'GPS tidak tersedia atau izin ditolak. Presensi dapat dilanjutkan.';
-        resolve(null);
+      function(err) {
+        let alasan = 'Lokasi GPS tidak berhasil dibaca.';
+        if (err && err.code === 1) alasan = 'Izin lokasi ditolak. Izinkan akses lokasi untuk situs ini lalu coba lagi.';
+        else if (err && err.code === 2) alasan = 'Lokasi tidak tersedia. Aktifkan layanan lokasi perangkat lalu coba lagi.';
+        else if (err && err.code === 3) alasan = 'Waktu membaca GPS habis. Coba lagi di tempat terbuka.';
+        document.getElementById('gpsStatus').textContent = alasan + ' Presensi diblokir.';
+        reject(new Error(alasan));
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      }
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
     );
   });
+}
+
+function jarakKePesantren(lat, lng) {
+  const lat0 = -1.5985568, lng0 = 103.5589691;
+  const rad = Math.PI / 180;
+  const dLat = (lat - lat0) * rad;
+  const dLng = (lng - lng0) * rad;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat0 * rad) * Math.cos(lat * rad) * Math.sin(dLng / 2) ** 2;
+  return 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 function buatId() {
@@ -1246,6 +1331,14 @@ async function kirimPresensi(jenis) {
       ', pukul ' + hasil.jam + ' WIB.',
       'success'
     );
+
+    // Kosongkan PIN setelah presensi benar-benar berhasil disimpan,
+    // agar guru berikutnya harus memasukkan PIN miliknya sendiri.
+    const inputPin = document.getElementById('pin');
+    if (inputPin) {
+      inputPin.value = '';
+      inputPin.blur();
+    }
 
     fotoData = null;
     preview.removeAttribute('src');
