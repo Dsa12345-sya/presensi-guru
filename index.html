@@ -395,6 +395,30 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
   .container > .card:nth-of-type(2) > .camera { min-height: 0; }
 }
 
+
+/* FULL WIDTH: gunakan seluruh lebar browser pada komputer */
+@media (min-width: 800px) {
+  .container {
+    width: calc(100% - 24px) !important;
+    max-width: none !important;
+    margin: 12px auto 24px !important;
+    display: block !important;
+  }
+  .top-layout {
+    width: 100% !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 18px !important;
+    align-items: stretch !important;
+  }
+  .camera-panel, .info-panel { min-width: 0; }
+  .camera-panel .camera { min-height: 420px; }
+  #rekapBulanan { width: 100% !important; margin-top: 16px !important; }
+  #rekapBulanan > div:last-of-type { width: 100%; }
+}
+@media (min-width: 1500px) {
+  .camera-panel .camera { min-height: 500px; }
+}
+
 </style>
 </head>
 
