@@ -547,6 +547,10 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
     align-self: start !important;
     margin-top: 12px !important;
   }
+  .info-panel > .attendance {
+    margin-top: 12px !important;
+    margin-bottom: 0 !important;
+  }
 }
 
 /* PERBAIKAN AKHIR: GPS berada di panel kanan dan rekap memenuhi lebar */
@@ -696,9 +700,7 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
       </div>
     </div>
   </section>
-  </div>
-</div>
-<div class="attendance">
+  <div class="attendance">
       <button type="button" class="masuk" id="btnMasuk"
               onclick="kirimPresensi('Masuk')">✓ ABSEN MASUK</button>
       <button type="button" class="pulang" id="btnPulang"
@@ -706,6 +708,12 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
       <button type="button" class="night-button" id="btnMalam"
               onclick="kirimPresensi('Kontrol Mengajar Malam')">🌙 KONTROL MENGAJAR MALAM</button>
     </div>
+  </div>
+</div>
+  </section>
+  </div>
+</div>
+
 <div class="message" id="message" role="status" aria-live="polite"></div>
 
   <section class="card" id="rekapBulanan" style="margin-top:18px">
