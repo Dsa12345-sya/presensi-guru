@@ -292,48 +292,37 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
   .footer { order:4; }
 }
 
+
+/* Layout final: kamera kiri, informasi kanan, kontrol dan rekap di bawah */
+@media(min-width:800px){ .container { display:block !important; } }
+.top-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.12fr); gap:16px; align-items:stretch; }
+.camera-panel { min-width:0; background:#fff; border:1px solid var(--border); border-radius:20px; padding:clamp(16px,2.5vw,26px); box-shadow:0 8px 24px #153e2c0a; }
+.camera-panel .camera { aspect-ratio:4/3; width:100%; }
+.camera-panel .actions { grid-template-columns:1fr 1fr; }
+.info-panel { min-width:0; display:flex; flex-direction:column; gap:0; }
+.info-panel .header { margin:0 0 12px; border-radius:20px; }
+.info-panel > .card { border:1px solid var(--border); border-radius:18px; border-top:1px solid var(--border); margin:0; flex:1; }
+.gps { margin-top:16px; }
+.attendance { grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:12px; }
+.attendance .night-button { grid-column:auto; }
+.message { margin-top:12px; }
+#rekapBulanan { margin-top:16px !important; }
+@media(max-width:799px) {
+ .top-layout { display:flex; flex-direction:column; gap:12px; }
+ .info-panel { order:0; }
+ .camera-panel { order:1; }
+ .attendance { grid-template-columns:1fr; }
+ .attendance .night-button { grid-column:1; }
+}
+
 </style>
 </head>
 
 <body>
 <main class="container">
-  <header class="header">
-    <div class="logo">📋</div>
-    <h1>PRESENSI ONLINE</h1>
-    <p class="subtitle">Guru dan Tenaga Kependidikan</p>
-  </header>
-
-  <section class="card">
-    <div class="clock">
-      <div class="clock-time" id="clockTime">--:--:--</div>
-      <div class="clock-date" id="clockDate">Memuat tanggal...</div>
-      <div class="hint">Waktu resmi presensi dicatat oleh server.</div>
-    </div>
-
-    <label for="pin">PIN mengajar</label>
-    <input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="10"
-           placeholder="Masukkan PIN mengajar" autocomplete="off">
-    <div class="hint">Gunakan PIN yang sudah terdaftar di MASTER GURU MAPEL. Nama akan dikenali otomatis oleh server.</div>
-
-    <div class="status-box">
-      <div class="status-title">Status presensi hari ini</div>
-      <div class="status-line">
-        <span>Absen masuk</span>
-        <span id="statusMasuk" class="status-value">Masukkan PIN terlebih dahulu</span>
-      </div>
-      <div class="status-line">
-        <span>Absen pulang</span>
-        <span id="statusPulang" class="status-value">Masukkan PIN terlebih dahulu</span>
-      </div>
-      <div class="session-schedule" aria-label="Jadwal sesi presensi">
-        <div class="session-item"><strong>🌅 Masuk pagi</strong><span>07.00–08.30 WIB</span><small id="jadwalMasuk">Memeriksa jadwal…</small></div>
-        <div class="session-item"><strong>🌇 Pulang sore</strong><span>16.00–17.30 WIB</span><small id="jadwalPulang">Memeriksa jadwal…</small></div>
-        <div class="session-item night"><strong>🌙 Kontrol mengajar malam</strong><span>20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="card">
+  <div class="top-layout">
+  <section class="camera-panel">
+<section class="card">
     <div class="section-label">📷 Kamera langsung</div>
 
     <div class="camera">
@@ -368,7 +357,51 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
       sebelum mengirim presensi.
     </div>
 
-    <div class="gps">
+    
+
+    
+
+    
+  </section>
+  </section>
+  <div class="info-panel">
+<header class="header">
+    <div class="logo">📋</div>
+    <h1>PRESENSI ONLINE</h1>
+    <p class="subtitle">Guru dan Tenaga Kependidikan</p>
+  </header>
+<section class="card">
+    <div class="clock">
+      <div class="clock-time" id="clockTime">--:--:--</div>
+      <div class="clock-date" id="clockDate">Memuat tanggal...</div>
+      <div class="hint">Waktu resmi presensi dicatat oleh server.</div>
+    </div>
+
+    <label for="pin">PIN mengajar</label>
+    <input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="10"
+           placeholder="Masukkan PIN mengajar" autocomplete="off">
+    <div class="hint">Gunakan PIN yang sudah terdaftar di MASTER GURU MAPEL. Nama akan dikenali otomatis oleh server.</div>
+
+    <div class="status-box">
+      <div class="status-title">Status presensi hari ini</div>
+      <div class="status-line">
+        <span>Absen masuk</span>
+        <span id="statusMasuk" class="status-value">Masukkan PIN terlebih dahulu</span>
+      </div>
+      <div class="status-line">
+        <span>Absen pulang</span>
+        <span id="statusPulang" class="status-value">Masukkan PIN terlebih dahulu</span>
+      </div>
+      <div class="session-schedule" aria-label="Jadwal sesi presensi">
+        <div class="session-item"><strong>🌅 Masuk pagi</strong><span>07.00–08.30 WIB</span><small id="jadwalMasuk">Memeriksa jadwal…</small></div>
+        <div class="session-item"><strong>🌇 Pulang sore</strong><span>16.00–17.30 WIB</span><small id="jadwalPulang">Memeriksa jadwal…</small></div>
+        <div class="session-item night"><strong>🌙 Kontrol mengajar malam</strong><span>20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
+      </div>
+    </div>
+  </section>
+  </div>
+</div>
+<div class="gps">
       <input type="checkbox" id="pakaiGPS" checked>
       <div>
         <div class="gps-title">Catat lokasi GPS jika diizinkan</div>
@@ -377,8 +410,7 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
         </div>
       </div>
     </div>
-
-    <div class="attendance">
+<div class="attendance">
       <button type="button" class="masuk" id="btnMasuk"
               onclick="kirimPresensi('Masuk')">✓ ABSEN MASUK</button>
       <button type="button" class="pulang" id="btnPulang"
@@ -386,9 +418,7 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
       <button type="button" class="night-button" id="btnMalam"
               onclick="kirimPresensi('Kontrol Mengajar Malam')">🌙 KONTROL MENGAJAR MALAM</button>
     </div>
-
-    <div class="message" id="message" role="status" aria-live="polite"></div>
-  </section>
+<div class="message" id="message" role="status" aria-live="polite"></div>
 
   <section class="card" id="rekapBulanan" style="margin-top:18px">
     <h2 style="margin-top:0">📅 Lihat Presensi Guru</h2>
