@@ -1270,6 +1270,10 @@ async function kirimPresensi(jenis) {
       'success'
     );
 
+    // Kosongkan PIN hanya setelah server mengonfirmasi presensi berhasil.
+    // Jika terjadi kesalahan, PIN tetap terisi agar pengguna dapat mencoba lagi.
+    document.getElementById('pin').value = '';
+
     fotoData = null;
     preview.removeAttribute('src');
     preview.style.display = 'none';
