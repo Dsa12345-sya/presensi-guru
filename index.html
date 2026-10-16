@@ -329,7 +329,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
  * URL BACKEND APPS SCRIPT MILIK BRO.
  * Tidak perlu mengubah URL ini lagi.
  */
-const API_URL = 'https://script.google.com/macros/s/AKfycbzlmkQfKM8eg5v22k-Pb7oRCSLsFXeWwDZvUcmXUJ_ze7nMewofSjIULbDUmPIzhQrTzA/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzL5AzchxyUImdn0k_0Rr_tzDJlogxMElaFLpk7GM2kcIQD9nC2oHWskuhPWb8Lj5SG5g/exec';
 
 let stream = null;
 let fotoData = null;
@@ -357,16 +357,31 @@ function pinSekarang() {
   return document.getElementById('pin').value.trim();
 }
 
+function waktuWIBParts() {
+  // Ambil angka waktu secara terstruktur, jangan memecah teks lokal id-ID
+  // karena sebagian browser dapat menampilkan pemisah titik, bukan titik dua.
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hourCycle: 'h23'
+  }).formatToParts(new Date());
+  const hasil = {};
+  parts.forEach(function(p) {
+    if (p.type === 'hour' || p.type === 'minute' || p.type === 'second') hasil[p.type] = Number(p.value);
+  });
+  return {hour: hasil.hour || 0, minute: hasil.minute || 0, second: hasil.second || 0};
+}
+
 function perbaruiJam() {
   const now = new Date();
-  const opsiWaktu = {timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false};
-  const waktu = now.toLocaleTimeString('id-ID', opsiWaktu);
+  const parts = waktuWIBParts();
+  const waktu = String(parts.hour).padStart(2, '0') + ':' +
+                String(parts.minute).padStart(2, '0') + ':' +
+                String(parts.second).padStart(2, '0');
   document.getElementById('clockTime').textContent = waktu;
   document.getElementById('clockDate').textContent = now.toLocaleDateString('id-ID', {
     timeZone:'Asia/Jakarta', weekday:'long', day:'numeric', month:'long', year:'numeric'
   });
-  const bagian = waktu.split(':').map(Number);
-  const menit = bagian[0] * 60 + bagian[1];
+  const menit = parts.hour * 60 + parts.minute;
   const sesi = [
     {jenis:'Masuk', id:'btnMasuk', label:'jadwalMasuk', awal:7*60, akhir:8*60+30, nama:'Masuk pagi'},
     {jenis:'Pulang', id:'btnPulang', label:'jadwalPulang', awal:16*60, akhir:17*60+30, nama:'Pulang sore'},
@@ -723,9 +738,8 @@ async function kirimPresensi(jenis) {
       throw new Error('Masukkan PIN mengajar 4–10 angka.');
     }
 
-    const sekarangWIB = new Date().toLocaleTimeString('en-GB', {timeZone:'Asia/Jakarta', hour:'2-digit', minute:'2-digit', hour12:false});
-    const bagianJam = sekarangWIB.split(':').map(Number);
-    const menitSekarang = bagianJam[0] * 60 + bagianJam[1];
+    const jamPresensiWIB = waktuWIBParts();
+    const menitSekarang = jamPresensiWIB.hour * 60 + jamPresensiWIB.minute;
     const batasSesi = {
       'Masuk':[420,510,'07.00–08.30 WIB'],
       'Pulang':[960,1050,'16.00–17.30 WIB'],
