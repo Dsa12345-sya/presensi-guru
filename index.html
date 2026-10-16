@@ -527,6 +527,28 @@ body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
 }
 
 
+/* Koreksi ruang kosong: panel kanan mengikuti tinggi kontennya, bukan tinggi kamera */
+@media (min-width: 800px) {
+  .top-layout {
+    align-items: start !important;
+  }
+  .info-panel {
+    align-self: start !important;
+    height: fit-content !important;
+    min-height: 0 !important;
+  }
+  .info-panel > .card {
+    flex: 0 0 auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    align-content: start !important;
+  }
+  .info-panel > .card > .gps {
+    align-self: start !important;
+    margin-top: 12px !important;
+  }
+}
+
 /* PERBAIKAN AKHIR: GPS berada di panel kanan dan rekap memenuhi lebar */
 @media (min-width: 800px) {
   .info-panel > .card > .gps {
