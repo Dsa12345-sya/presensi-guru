@@ -203,6 +203,54 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   .attendance { grid-template-columns: 1fr; }
   h1 { font-size: 21px; }
 }
+
+/* Penyegaran desain keseluruhan; fungsi kamera dan presensi tetap */
+body { background: radial-gradient(circle at top left,#e2f2ff 0,transparent 34%), linear-gradient(135deg,#f4f8fc,#edf7f2 58%,#f7f3ff); }
+.container { width:min(100% - 24px, 1180px); margin:24px auto 34px; }
+.header { position:relative; overflow:hidden; padding:30px 24px; text-align:left; background:linear-gradient(120deg,#103f58,#176b50 60%,#299c78); box-shadow:0 12px 30px #164e3a20; border-radius:22px 22px 0 0; }
+.header:after { content:'☪'; position:absolute; right:30px; top:-24px; font-size:116px; color:#ffffff18; pointer-events:none; }
+.logo { display:inline-block; margin:0 12px 0 0; vertical-align:middle; }
+h1 { display:inline-block; vertical-align:middle; font-size:clamp(22px,3vw,32px); }
+.subtitle { margin-top:9px; font-size:14px; }
+.card { padding:clamp(16px,2.5vw,26px); box-shadow:0 8px 24px #153e2c0a; }
+.card h2 { color:#163f32; }
+.clock { background:linear-gradient(135deg,#e9f7ef,#eef7ff); border:1px solid #d7ebe0; }
+.camera { box-shadow:0 8px 22px #102f2518; }
+button { transition:transform .16s ease,filter .16s ease,box-shadow .16s ease; }
+button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px); box-shadow:0 5px 12px #163e2b1c; }
+#rekapBulanan { border-radius:18px; border-top:1px solid var(--border); }
+#rekapBulanan h2 { font-size:clamp(21px,2.5vw,28px); }
+#rekapBulanan > div:first-of-type { padding:14px; background:#f4faf7; border:1px solid #e0eee7; border-radius:14px; }
+#btnMuatRekap { min-height:44px; box-shadow:0 4px 10px #176b5022; }
+#statusRekap { padding:8px 2px; }
+#tabelRekap { min-width:970px; border-collapse:separate !important; border-spacing:0; overflow:hidden; border-radius:13px; background:#fff; font-size:13px; }
+#tabelRekap th { position:sticky; top:0; background:#e8f4ee; color:#164b39; font-size:12px; white-space:nowrap; }
+#tabelRekap th,#tabelRekap td { padding:10px 11px !important; border:1px solid #dce9e2 !important; vertical-align:middle; }
+#tabelRekap tbody tr:nth-child(even) { background:#f8fbf9; }
+#tabelRekap tbody tr:hover { background:#eff8f3; }
+.rekap-jam { display:inline-block; padding:7px 9px; min-width:66px; text-align:center; border-radius:9px; background:#e5f8eb; color:#116744; font-weight:800; white-space:nowrap; }
+.rekap-jam.pulang { background:#fff0e5; color:#b64c16; }
+.rekap-jam.malam { background:#f1e8ff; color:#6b21a8; }
+.rekap-foto { display:block; width:58px; height:78px; object-fit:cover; object-position:center; border-radius:7px; border:1px solid #d8e5dd; box-shadow:0 2px 6px #183e2b1a; background:#f3f6f4; }
+.rekap-foto-link { display:inline-block; text-decoration:none; }
+.rekap-hasil { display:inline-flex; min-width:66px; min-height:54px; flex-direction:column; align-items:center; justify-content:center; gap:2px; border-radius:10px; font-size:11px; font-weight:700; }
+.rekap-hasil b { font-size:22px; line-height:1; }
+.rekap-hasil.lengkap { color:#087443; background:#dcfce7; }
+.rekap-hasil.belum { color:#b42318; background:#fee4e2; }
+.rekap-tidak-ada { color:#829087; font-weight:600; }
+.footer { margin-top:16px; background:#ffffffb8; border:1px solid #e1ebe5; border-radius:14px; }
+@media(max-width:620px) {
+ .container { width:calc(100% - 14px); margin:8px auto 20px; }
+ .header { padding:22px 16px; border-radius:17px 17px 0 0; }
+ .header:after { right:8px; font-size:76px; }
+ .card { padding:15px; }
+ .clock-time { font-size:27px; }
+ #rekapBulanan > div:first-of-type { align-items:stretch !important; }
+ #bulanRekap { max-width:none !important; flex:1; min-width:145px; }
+ #btnMuatRekap { width:100%; }
+ #tabelRekap { min-width:940px; }
+}
+
 </style>
 </head>
 
@@ -303,7 +351,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
   <section class="card" id="rekapBulanan" style="margin-top:18px">
     <h2 style="margin-top:0">📅 Lihat Presensi Guru</h2>
-    <p class="hint">Rekap bulanan presensi masuk dan pulang. Klik foto untuk membukanya.</p>
+    <p class="hint">Rekap masuk, pulang, dan kontrol mengajar malam. Foto tampil langsung; klik foto untuk memperbesar. Hasil presensi hanya menghitung masuk + pulang, tidak termasuk kontrol malam.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0">
       <label for="bulanRekap" style="margin:0">Bulan</label>
       <input id="bulanRekap" type="month" style="max-width:210px;margin:0">
@@ -312,7 +360,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     <div id="statusRekap" class="hint" aria-live="polite">Pilih bulan lalu tekan Tampilkan Rekap.</div>
     <div style="overflow-x:auto;margin-top:12px">
       <table id="tabelRekap" style="width:100%;border-collapse:collapse;display:none">
-        <thead><tr style="background:#e8f4ee;text-align:left"><th style="padding:9px;border:1px solid #d5e3dc">Tanggal</th><th style="padding:9px;border:1px solid #d5e3dc">Nama Guru</th><th style="padding:9px;border:1px solid #d5e3dc">Masuk</th><th style="padding:9px;border:1px solid #d5e3dc">Foto Masuk</th><th style="padding:9px;border:1px solid #d5e3dc">Pulang</th><th style="padding:9px;border:1px solid #d5e3dc">Foto Pulang</th></tr></thead>
+        <thead><tr><th>Tanggal</th><th>Nama Guru</th><th>Jam Masuk</th><th>Jam Pulang</th><th>Foto Masuk</th><th>Foto Pulang</th><th>Jam Kontrol Malam</th><th>Foto Kontrol Malam</th><th>Hasil Presensi</th></tr></thead>
         <tbody id="isiRekap"></tbody>
       </table>
     </div>
@@ -869,17 +917,35 @@ async function muatRekap() {
     isi.innerHTML = hasil.data.map(function(r) {
       const tanggal = escapeHtmlRekap(r.tanggal);
       const nama = escapeHtmlRekap(r.nama);
-      function linkFoto(url, label) {
-        if (!url || !/^https:\/\//i.test(String(url))) return '<span style="color:#888">—</span>';
-        const safe = escapeHtmlRekap(url);
-        return '<a href="' + safe + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+      function waktu(value, cls) {
+        if (!value || String(value).trim() === '' || String(value).trim() === '—' || String(value).trim() === '-') return '<span class="rekap-tidak-ada">—</span>';
+        return '<span class="rekap-jam ' + cls + '">' + escapeHtmlRekap(value) + '</span>';
       }
-      return '<tr><td style="padding:9px;border:1px solid #d5e3dc;white-space:nowrap">' + tanggal + '</td>' +
-        '<td style="padding:9px;border:1px solid #d5e3dc">' + nama + '</td>' +
-        '<td style="padding:9px;border:1px solid #d5e3dc;white-space:nowrap">' + escapeHtmlRekap(r.masuk || '—') + '</td>' +
-        '<td style="padding:9px;border:1px solid #d5e3dc">' + linkFoto(r.fotoMasuk, '📷 Lihat foto') + '</td>' +
-        '<td style="padding:9px;border:1px solid #d5e3dc;white-space:nowrap">' + escapeHtmlRekap(r.pulang || '—') + '</td>' +
-        '<td style="padding:9px;border:1px solid #d5e3dc">' + linkFoto(r.fotoPulang, '📷 Lihat foto') + '</td></tr>';
+      function foto(url, label) {
+        if (!url || !/^https:\/\//i.test(String(url))) return '<span class="rekap-tidak-ada">—</span>';
+        const safe = escapeHtmlRekap(url);
+        let imageUrl = safe;
+        const idMatch = String(url).match(/drive\.google\.com\/file\/d\/([^/?]+)/i) || String(url).match(/[?&]id=([^&]+)/i);
+        if (idMatch && idMatch[1]) imageUrl = 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(idMatch[1]) + '&sz=w180';
+        return '<a class="rekap-foto-link" href="' + safe + '" target="_blank" rel="noopener noreferrer" title="Buka ' + label + '"><img class="rekap-foto" loading="lazy" src="' + escapeHtmlRekap(imageUrl) + '" alt="' + label + '" onerror="this.style.display=\'none\';this.parentNode.insertAdjacentHTML(\'beforeend\',\'<span class=\'rekap-tidak-ada\'>Foto tidak tersedia</span>\')"></a>';
+      }
+      const masuk = String(r.masuk || '').trim();
+      const pulang = String(r.pulang || '').trim();
+      const lengkap = !!masuk && masuk !== '—' && masuk !== '-' && !!pulang && pulang !== '—' && pulang !== '-';
+      // Variasi nama field malam didukung agar cocok dengan payload API yang sudah ada.
+      const malam = r.malam || r.kontrolMalam || r.jamMalam || r.masukMalam || '';
+      const fotoMalam = r.fotoMalam || r.fotoKontrolMalam || r.fotoMalamUrl || '';
+      return '<tr>' +
+        '<td style="white-space:nowrap">' + tanggal + '</td>' +
+        '<td>' + nama + '</td>' +
+        '<td>' + waktu(masuk, '') + '</td>' +
+        '<td>' + waktu(pulang, 'pulang') + '</td>' +
+        '<td>' + foto(r.fotoMasuk, 'Foto masuk') + '</td>' +
+        '<td>' + foto(r.fotoPulang, 'Foto pulang') + '</td>' +
+        '<td>' + waktu(malam, 'malam') + '</td>' +
+        '<td>' + foto(fotoMalam, 'Foto kontrol mengajar malam') + '</td>' +
+        '<td><span class="rekap-hasil ' + (lengkap ? 'lengkap' : 'belum') + '"><b>' + (lengkap ? '1' : '0') + '</b><span>' + (lengkap ? 'Hadir lengkap' : 'Tidak lengkap') + '</span></span></td>' +
+        '</tr>';
     }).join('');
     tabel.style.display = 'table';
     status.textContent = 'Rekap ' + bulan + ': ' + hasil.data.length + ' catatan guru/hari.';
