@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#176b50">
 <title>Presensi Guru dan Tenaga Kependidikan</title>
+<!-- Versi GitHub: rekap visual foto + hasil presensi, 2026-10-16 -->
 
 <style>
 :root {
@@ -251,51 +252,363 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
  #tabelRekap { min-width:940px; }
 }
 
+
+/* Tata letak baru: kamera di kiri, informasi di kanan, tombol dan rekap di bawah */
+@media (min-width: 800px) {
+  .container {
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) minmax(0, 1.12fr);
+    grid-template-areas:
+      "camera header"
+      "camera info"
+      "actions actions"
+      "rekap rekap"
+      "footer footer";
+    align-items:stretch;
+    column-gap:16px;
+    row-gap:0;
+  }
+  .header { grid-area:header; border-radius:20px; margin-bottom:12px; padding:22px 24px; }
+  .container > .card:first-of-type { grid-area:info; border:1px solid var(--border); border-radius:18px; margin:0 0 12px; padding:18px; }
+  .container > .card:nth-of-type(2) { display:contents; }
+  .container > .card:nth-of-type(2) > .section-label { grid-area:camera; align-self:start; margin:0; padding:0; height:0; overflow:hidden; }
+  .container > .card:nth-of-type(2) > .camera { grid-area:camera; align-self:start; margin-top:0; width:100%; aspect-ratio:4/3; }
+  .container > .card:nth-of-type(2) > .actions { grid-column:1; margin-top:12px; }
+  .container > .card:nth-of-type(2) > .actions:nth-of-type(2) { grid-column:1; }
+  .container > .card:nth-of-type(2) > .hint { grid-column:1; }
+  .container > .card:nth-of-type(2) > .gps { grid-column:2; grid-row:3; margin:0 0 12px; align-self:end; }
+  .container > .card:nth-of-type(2) > .attendance { grid-area:actions; grid-template-columns:repeat(3,minmax(0,1fr)); margin:16px 0; }
+  .container > .card:nth-of-type(2) > .attendance .night-button { grid-column:auto; }
+  .container > .card:nth-of-type(2) > .message { grid-area:actions; align-self:end; margin-top:76px; }
+  #rekapBulanan { grid-area:rekap; margin-top:0 !important; }
+  .footer { grid-area:footer; }
+}
+@media (max-width:799px) {
+  .container { display:flex; flex-direction:column; }
+  .header { order:0; }
+  .container > .card:first-of-type { order:1; }
+  .container > .card:nth-of-type(2) { order:2; }
+  #rekapBulanan { order:3; }
+  .footer { order:4; }
+}
+
+
+/* Layout final: kamera kiri, informasi kanan, kontrol dan rekap di bawah */
+@media(min-width:800px){ .container { display:block !important; } }
+.top-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.12fr); gap:16px; align-items:stretch; }
+.camera-panel { min-width:0; background:#fff; border:1px solid var(--border); border-radius:20px; padding:clamp(16px,2.5vw,26px); box-shadow:0 8px 24px #153e2c0a; }
+.camera-panel .camera { aspect-ratio:4/3; width:100%; }
+.camera-panel .actions { grid-template-columns:1fr 1fr; }
+.info-panel { min-width:0; display:flex; flex-direction:column; gap:0; }
+.info-panel .header { margin:0 0 12px; border-radius:20px; }
+.info-panel > .card { border:1px solid var(--border); border-radius:18px; border-top:1px solid var(--border); margin:0; flex:1; }
+.gps { margin-top:16px; }
+.attendance { grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:12px; }
+.attendance .night-button { grid-column:auto; }
+.message { margin-top:12px; }
+#rekapBulanan { margin-top:16px !important; }
+@media(max-width:799px) {
+ .top-layout { display:flex; flex-direction:column; gap:12px; }
+ .info-panel { order:0; }
+ .camera-panel { order:1; }
+ .attendance { grid-template-columns:1fr; }
+ .attendance .night-button { grid-column:1; }
+}
+
+
+
+/* FINAL DESKTOP LAYOUT: lebar penuh, kamera besar, panel kanan lebih padat */
+@media (min-width: 800px) {
+  .container {
+    width: min(calc(100% - 40px), 1480px) !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) !important;
+    column-gap: 18px !important;
+    row-gap: 0 !important;
+    align-items: start !important;
+  }
+  .header {
+    padding: 24px 28px !important;
+    margin-bottom: 12px !important;
+    min-height: 112px;
+  }
+  .container > .card:first-of-type {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-areas:
+      "clock pinlabel"
+      "clock pininput"
+      "clock pinhint"
+      "status status" !important;
+    gap: 10px 14px !important;
+    align-content: start !important;
+    padding: 18px !important;
+  }
+  .container > .card:first-of-type > .clock {
+    grid-area: clock;
+    margin: 0 !important;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .container > .card:first-of-type > label { grid-area: pinlabel; margin: 0 0 -6px !important; align-self: end; }
+  .container > .card:first-of-type > input#pin { grid-area: pininput; min-height: 44px; }
+  .container > .card:first-of-type > .hint { grid-area: pinhint; margin: -5px 0 0 !important; }
+  .container > .card:first-of-type > .status-box { grid-area: status; margin-top: 2px !important; padding: 12px !important; }
+  .session-schedule {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .session-item {
+    grid-template-columns: 1fr !important;
+    align-content: start;
+    gap: 6px !important;
+    min-height: 92px;
+    padding: 10px !important;
+  }
+  .session-item span { white-space: normal !important; }
+  .session-item small { grid-column: 1 !important; }
+  .container > .card:nth-of-type(2) > .camera {
+    width: 100% !important;
+    aspect-ratio: 4 / 3 !important;
+    min-height: 360px;
+  }
+  .container > .card:nth-of-type(2) > .actions {
+    grid-column: 1 !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .container > .card:nth-of-type(2) > .gps {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+    align-self: end;
+  }
+  .container > .card:nth-of-type(2) > .attendance {
+    grid-area: actions !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    margin: 16px 0 !important;
+  }
+  #rekapBulanan { margin-top: 0 !important; }
+}
+@media (max-width: 799px) {
+  .container { width: calc(100% - 18px) !important; }
+  .session-schedule { grid-template-columns: 1fr !important; }
+  .container > .card:nth-of-type(2) > .camera { min-height: 0; }
+}
+
+
+/* FULL WIDTH: gunakan seluruh lebar browser pada komputer */
+@media (min-width: 800px) {
+  .container {
+    width: calc(100% - 24px) !important;
+    max-width: none !important;
+    margin: 12px auto 24px !important;
+    display: block !important;
+  }
+  .top-layout {
+    width: 100% !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 18px !important;
+    align-items: stretch !important;
+  }
+  .camera-panel, .info-panel { min-width: 0; }
+  .camera-panel .camera { min-height: 420px; }
+  #rekapBulanan { width: 100% !important; margin-top: 16px !important; }
+  #rekapBulanan > div:last-of-type { width: 100%; }
+}
+@media (min-width: 1500px) {
+  .camera-panel .camera { min-height: 500px; }
+}
+
+
+/* FINAL DESIGN: full-width dashboard mengikuti referensi pengguna */
+:root { --green:#087c55; --dark:#075b43; --bg:#edf7f3; --text:#183d35; --muted:#637a73; --border:#dcebe4; }
+body { background:linear-gradient(135deg,#eaf4ff 0%,#f3faf6 52%,#edf7f3 100%); }
+.container { width:calc(100% - 24px) !important; max-width:none !important; margin:10px auto 24px !important; }
+.top-layout { display:grid !important; grid-template-columns:minmax(0, .92fr) minmax(0, 1.08fr) !important; gap:12px !important; align-items:stretch !important; }
+.camera-panel { padding:12px !important; border-radius:20px !important; }
+.camera-panel > .card { padding:0 !important; border:0 !important; box-shadow:none !important; }
+.section-label { display:none !important; }
+.camera-panel .camera { position:relative; width:100%; min-height:0 !important; aspect-ratio:3 / 2 !important; border-radius:15px !important; background:#10231c; }
+.camera-badge { position:absolute; z-index:5; top:14px; left:14px; display:inline-flex; align-items:center; gap:8px; padding:9px 13px; border-radius:999px; background:#17211eeb; color:#fff; font-size:13px; font-weight:800; box-shadow:0 3px 12px #0002; }
+.camera-dot { width:10px; height:10px; border-radius:50%; background:#f87171; box-shadow:0 0 0 3px #ffffff20; }
+.camera-badge.on .camera-dot { background:#00e676; box-shadow:0 0 0 3px #00e6762c,0 0 12px #00e676a0; }
+.camera-badge.off .camera-dot { background:#f87171; }
+.camera-panel .actions { grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:9px !important; margin-top:10px !important; }
+.camera-panel .actions button { min-height:48px; border-radius:12px; font-size:clamp(11px,1vw,14px); }
+.camera-panel .hint { margin:10px 2px 2px !important; }
+.info-panel { gap:12px !important; }
+.info-panel .header { min-height:118px; margin:0 !important; border-radius:18px !important; padding:18px 20px !important; display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:14px; background:linear-gradient(120deg,#087c55,#075b43); box-shadow:none; }
+.header:after { content:'' !important; }
+.header-brand-icon { display:flex; align-items:center; justify-content:center; width:76px; height:76px; border-radius:18px; background:#ffffff1a; font-size:54px; }
+.header-copy { min-width:0; }
+.header h1 { display:block; font-size:clamp(23px,2.6vw,38px) !important; line-height:1.08; text-transform:none; color:#fff; }
+.header .subtitle { margin:5px 0 0 !important; font-size:clamp(13px,1.3vw,18px) !important; font-weight:700; color:#c6f4df; }
+.header-tagline { margin:7px 0 0; color:#e3fff1; font-size:clamp(11px,1vw,14px); font-style:italic; }
+.header-date { display:flex; align-items:center; gap:10px; padding:12px 14px; min-width:155px; border-radius:13px; background:#ffffff24; color:white; }
+.header-calendar { font-size:31px; line-height:1; }
+.header-date b,.header-date small { display:block; }
+.header-date b { font-size:14px; text-transform:capitalize; }
+.header-date small { margin-top:4px; font-size:12px; color:#e0fff0; }
+.info-panel > .card { padding:16px !important; border:1px solid var(--border) !important; border-radius:18px !important; display:grid !important; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) !important; grid-template-areas:"clock pin" "status status" !important; gap:12px !important; align-content:start; }
+.info-panel .clock { grid-area:clock; margin:0 !important; padding:14px !important; display:flex; align-items:center; justify-content:center; gap:13px; text-align:left; min-height:98px; background:linear-gradient(135deg,#e5f7ee,#eef8ff); border:0; border-radius:14px; }
+.clock-icon { flex:0 0 54px; height:54px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:#d5f2e4; color:#087c55; font-size:44px; font-weight:700; }
+.clock-content { min-width:0; }
+.clock-time { font-size:clamp(25px,2.6vw,38px) !important; line-height:1.1; letter-spacing:0 !important; }
+.clock-date { margin-top:6px; font-size:13px; }
+.clock .hint { margin-top:5px !important; font-size:10px; }
+.pin-panel { grid-area:pin; display:flex; align-items:center; gap:12px; padding:12px; min-width:0; border-radius:14px; background:#f0f8f4; }
+.pin-icon { display:flex; flex:0 0 52px; width:52px; height:52px; align-items:center; justify-content:center; border-radius:13px; background:#d9f3e6; font-size:28px; }
+.pin-fields { min-width:0; width:100%; }
+.pin-fields label { margin:0 0 6px !important; font-size:15px; }
+.pin-fields input#pin { width:100%; min-height:43px; padding:10px 12px; border:1px solid #d3e1da; border-radius:10px; font-size:16px; background:#fff; }
+.pin-fields .hint { margin-top:5px !important; font-size:11px; }
+.info-panel .status-box { grid-area:status; margin:0 !important; padding:12px !important; border-radius:14px; }
+.status-title { font-size:14px; }
+.status-line { margin-top:8px; font-size:12px; }
+.session-schedule { grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:9px !important; margin-top:13px !important; }
+.session-item { grid-template-columns:1fr !important; gap:7px !important; min-height:100px; padding:12px !important; border-radius:12px !important; background:#f2faf6; }
+.session-item strong { font-size:13px; }
+.session-item strong:first-letter { font-size:18px; }
+.session-item span { white-space:normal !important; font-size:12px; }
+.session-item small { grid-column:1 !important; font-size:11px; }
+.session-item:nth-child(1) { background:#edf9f1; }
+.session-item:nth-child(2) { background:#eef6ff; }
+.session-item.night { background:#f6efff; }
+.gps { width:100%; margin:12px 0 0 !important; padding:14px 16px !important; border-radius:14px !important; background:#f4faf7; }
+.gps-title { font-size:14px; }
+.attendance { width:100%; grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:12px !important; margin:12px 0 0 !important; }
+.attendance button { min-height:58px; border-radius:13px; font-size:clamp(12px,1.15vw,16px); box-shadow:0 4px 10px #123c2c12; }
+.attendance .masuk { background:linear-gradient(120deg,#087c55,#075b43); }
+.attendance .pulang { background:linear-gradient(120deg,#6792f0,#426bc4); }
+.attendance .night-button { background:linear-gradient(120deg,#a33df2,#7c3aed); }
+.message { width:100%; margin:10px 0 0 !important; }
+#rekapBulanan { width:100% !important; margin:16px 0 0 !important; padding:20px !important; border:1px solid var(--border) !important; border-radius:18px !important; }
+#rekapBulanan h2 { font-size:clamp(22px,2vw,30px) !important; }
+#rekapBulanan > div:first-of-type { display:flex; align-items:center; gap:10px; width:100%; }
+#bulanRekap { min-height:44px; }
+#btnMuatRekap { min-height:44px; }
+#tabelRekap { width:100% !important; min-width:1050px !important; font-size:13px !important; }
+#tabelRekap th,#tabelRekap td { padding:10px 12px !important; }
+.footer { width:100%; margin-top:14px; }
+@media(max-width:950px) and (min-width:700px) {
+ .container { width:calc(100% - 16px) !important; }
+ .top-layout { grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr) !important; gap:9px !important; }
+ .info-panel .header { grid-template-columns:auto minmax(0,1fr); }
+ .header-brand-icon { width:56px; height:56px; font-size:39px; }
+ .header-date { grid-column:1/-1; min-width:0; padding:8px 12px; }
+ .info-panel > .card { grid-template-columns:1fr !important; grid-template-areas:"clock" "pin" "status" !important; }
+ .session-schedule { grid-template-columns:1fr !important; }
+ .session-item { min-height:0; grid-template-columns:1fr auto !important; }
+ .session-item small { grid-column:1/-1 !important; }
+}
+@media(max-width:699px) {
+ .container { width:calc(100% - 14px) !important; margin:7px auto 16px !important; }
+ .top-layout { display:flex !important; flex-direction:column !important; gap:10px !important; }
+ .info-panel { order:0; }
+ .camera-panel { order:1; }
+ .info-panel .header { grid-template-columns:auto minmax(0,1fr); padding:14px !important; min-height:0; }
+ .header-brand-icon { width:50px; height:50px; font-size:35px; }
+ .header-date { grid-column:1/-1; min-width:0; padding:8px 10px; }
+ .header h1 { font-size:23px !important; }
+ .header-tagline { font-size:11px; }
+ .info-panel > .card { display:flex !important; flex-direction:column; gap:11px !important; }
+ .info-panel .clock { justify-content:flex-start; }
+ .pin-panel { width:100%; }
+ .session-schedule { grid-template-columns:1fr !important; }
+ .session-item { min-height:0; grid-template-columns:1fr auto !important; }
+ .session-item small { grid-column:1/-1 !important; }
+ .camera-panel .camera { aspect-ratio:4/3 !important; }
+ .camera-panel .actions { grid-template-columns:1fr 1fr !important; }
+ .attendance { grid-template-columns:1fr !important; }
+ .attendance button { min-height:52px; }
+ #rekapBulanan { padding:13px !important; }
+ #rekapBulanan > div:first-of-type { align-items:stretch; }
+ #bulanRekap,#btnMuatRekap { width:100% !important; max-width:none !important; }
+}
+
+
+/* Koreksi ruang kosong: panel kanan mengikuti tinggi kontennya, bukan tinggi kamera */
+@media (min-width: 800px) {
+  .top-layout {
+    align-items: start !important;
+  }
+  .info-panel {
+    align-self: start !important;
+    height: fit-content !important;
+    min-height: 0 !important;
+  }
+  .info-panel > .card {
+    flex: 0 0 auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    align-content: start !important;
+  }
+  .info-panel > .card > .gps {
+    align-self: start !important;
+    margin-top: 12px !important;
+  }
+  .info-panel > .attendance {
+    margin-top: 12px !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+/* PERBAIKAN AKHIR: GPS berada di panel kanan dan rekap memenuhi lebar */
+@media (min-width: 800px) {
+  .info-panel > .card > .gps {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    align-self: stretch;
+  }
+}
+#rekapBulanan {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  clear: both !important;
+}
+#rekapBulanan > h2,
+#rekapBulanan > p,
+#rekapBulanan > div {
+  width: 100% !important;
+  max-width: none !important;
+}
+#rekapBulanan > div:first-of-type {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+}
+#rekapBulanan > div[style*="overflow-x:auto"] {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  overflow-x: auto !important;
+}
+#tabelRekap {
+  display: table;
+  width: 100% !important;
+  min-width: 1050px !important;
+  table-layout: auto !important;
+}
+@media (max-width: 799px) {
+  .info-panel > .card > .gps { width: 100% !important; margin: 0 !important; }
+  #rekapBulanan { width: 100% !important; }
+}
+
 </style>
 </head>
 
 <body>
 <main class="container">
-  <header class="header">
-    <div class="logo">📋</div>
-    <h1>PRESENSI ONLINE</h1>
-    <p class="subtitle">Guru dan Tenaga Kependidikan</p>
-  </header>
-
-  <section class="card">
-    <div class="clock">
-      <div class="clock-time" id="clockTime">--:--:--</div>
-      <div class="clock-date" id="clockDate">Memuat tanggal...</div>
-      <div class="hint">Waktu resmi presensi dicatat oleh server.</div>
-    </div>
-
-    <label for="pin">PIN mengajar</label>
-    <input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="10"
-           placeholder="Masukkan PIN mengajar" autocomplete="off">
-    <div class="hint">Gunakan PIN yang sudah terdaftar di MASTER GURU MAPEL. Nama akan dikenali otomatis oleh server.</div>
-
-    <div class="status-box">
-      <div class="status-title">Status presensi hari ini</div>
-      <div class="status-line">
-        <span>Absen masuk</span>
-        <span id="statusMasuk" class="status-value">Masukkan PIN terlebih dahulu</span>
-      </div>
-      <div class="status-line">
-        <span>Absen pulang</span>
-        <span id="statusPulang" class="status-value">Masukkan PIN terlebih dahulu</span>
-      </div>
-      <div class="session-schedule" aria-label="Jadwal sesi presensi">
-        <div class="session-item"><strong>🌅 Masuk pagi</strong><span>07.00–08.30 WIB</span><small id="jadwalMasuk">Memeriksa jadwal…</small></div>
-        <div class="session-item"><strong>🌇 Pulang sore</strong><span>16.00–17.30 WIB</span><small id="jadwalPulang">Memeriksa jadwal…</small></div>
-        <div class="session-item night"><strong>🌙 Kontrol mengajar malam</strong><span>20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="card">
+  <div class="top-layout">
+  <section class="camera-panel">
+<section class="card">
     <div class="section-label">📷 Kamera langsung</div>
 
     <div class="camera">
+      <div class="camera-badge off" id="cameraBadge"><span class="camera-dot"></span><span id="cameraBadgeText">Kamera belum aktif</span></div>
       <video id="video" autoplay playsinline muted></video>
       <img id="preview" alt="Pratinjau foto presensi">
       <div class="placeholder" id="placeholder">
@@ -327,6 +640,56 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
       sebelum mengirim presensi.
     </div>
 
+    
+
+    
+
+    
+  </section>
+  </section>
+  <div class="info-panel">
+<header class="header">
+    <div class="header-brand-icon" aria-hidden="true">🧑‍🏫</div>
+    <div class="header-copy">
+      <h1>Presensi Online</h1>
+      <p class="subtitle">Guru dan Tenaga Kependidikan</p>
+      <p class="header-tagline">Disiplin hari ini untuk pendidikan yang lebih baik.</p>
+    </div>
+    <div class="header-date"><span class="header-calendar">▦</span><span><b id="headerDay">Presensi Hari Ini</b><small id="headerDate">Tanggal mengikuti jam server</small></span></div>
+  </header>
+<section class="card">
+    <div class="clock">
+      <div class="clock-icon" aria-hidden="true">◷</div>
+      <div class="clock-content">
+      <div class="clock-time" id="clockTime">--:--:--</div>
+      <div class="clock-date" id="clockDate">Memuat tanggal...</div>
+      <div class="hint">Waktu resmi presensi dicatat oleh server.</div>
+      </div>
+    </div>
+
+    <div class="pin-panel"><div class="pin-icon" aria-hidden="true">🔒</div><div class="pin-fields">
+    <label for="pin">Masukkan PIN</label>
+    <input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="10"
+           placeholder="Masukkan PIN" autocomplete="off">
+    <div class="hint">Gunakan PIN Anda untuk melakukan presensi.</div>
+    </div></div>
+
+    <div class="status-box">
+      <div class="status-title">Status presensi hari ini</div>
+      <div class="status-line">
+        <span>Absen masuk</span>
+        <span id="statusMasuk" class="status-value">Masukkan PIN terlebih dahulu</span>
+      </div>
+      <div class="status-line">
+        <span>Absen pulang</span>
+        <span id="statusPulang" class="status-value">Masukkan PIN terlebih dahulu</span>
+      </div>
+      <div class="session-schedule" aria-label="Jadwal sesi presensi">
+        <div class="session-item"><strong>🌅 Masuk pagi</strong><span>07.00–08.30 WIB</span><small id="jadwalMasuk">Memeriksa jadwal…</small></div>
+        <div class="session-item"><strong>🌇 Pulang sore</strong><span>16.00–17.30 WIB</span><small id="jadwalPulang">Memeriksa jadwal…</small></div>
+        <div class="session-item night"><strong>🌙 Kontrol mengajar malam</strong><span>20.00–21.30 WIB</span><small id="jadwalMalam">Memeriksa jadwal…</small></div>
+      </div>
+    </div>
     <div class="gps">
       <input type="checkbox" id="pakaiGPS" checked>
       <div>
@@ -336,8 +699,8 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
         </div>
       </div>
     </div>
-
-    <div class="attendance">
+  </section>
+  <div class="attendance">
       <button type="button" class="masuk" id="btnMasuk"
               onclick="kirimPresensi('Masuk')">✓ ABSEN MASUK</button>
       <button type="button" class="pulang" id="btnPulang"
@@ -345,9 +708,13 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
       <button type="button" class="night-button" id="btnMalam"
               onclick="kirimPresensi('Kontrol Mengajar Malam')">🌙 KONTROL MENGAJAR MALAM</button>
     </div>
-
-    <div class="message" id="message" role="status" aria-live="polite"></div>
+  </div>
+</div>
   </section>
+  </div>
+</div>
+
+<div class="message" id="message" role="status" aria-live="polite"></div>
 
   <section class="card" id="rekapBulanan" style="margin-top:18px">
     <h2 style="margin-top:0">📅 Lihat Presensi Guru</h2>
@@ -377,7 +744,7 @@ button:not(:disabled):hover { filter:brightness(1.05); transform:translateY(-1px
  * URL BACKEND APPS SCRIPT MILIK BRO.
  * Tidak perlu mengubah URL ini lagi.
  */
-const API_URL = 'https://script.google.com/macros/s/AKfycbzL5AzchxyUImdn0k_0Rr_tzDJlogxMElaFLpk7GM2kcIQD9nC2oHWskuhPWb8Lj5SG5g/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzlmkQfKM8eg5v22k-Pb7oRCSLsFXeWwDZvUcmXUJ_ze7nMewofSjIULbDUmPIzhQrTzA/exec';
 
 let stream = null;
 let fotoData = null;
@@ -388,6 +755,15 @@ const video = document.getElementById('video');
 const preview = document.getElementById('preview');
 const placeholder = document.getElementById('placeholder');
 const cameraInfo = document.getElementById('cameraInfo');
+function setStatusKamera(aktif, teks) {
+  const badge = document.getElementById('cameraBadge');
+  const label = document.getElementById('cameraBadgeText');
+  if (!badge || !label) return;
+  badge.classList.toggle('on', !!aktif);
+  badge.classList.toggle('off', !aktif);
+  label.textContent = teks || (aktif ? 'Kamera Aktif' : 'Kamera belum aktif');
+}
+
 
 function tampilPesan(teks, tipe) {
   const el = document.getElementById('message');
@@ -426,9 +802,14 @@ function perbaruiJam() {
                 String(parts.minute).padStart(2, '0') + ':' +
                 String(parts.second).padStart(2, '0');
   document.getElementById('clockTime').textContent = waktu;
-  document.getElementById('clockDate').textContent = now.toLocaleDateString('id-ID', {
+  const tanggalLengkap = now.toLocaleDateString('id-ID', {
     timeZone:'Asia/Jakarta', weekday:'long', day:'numeric', month:'long', year:'numeric'
   });
+  document.getElementById('clockDate').textContent = tanggalLengkap;
+  const headerDate = document.getElementById('headerDate');
+  const headerDay = document.getElementById('headerDay');
+  if (headerDate) headerDate.textContent = now.toLocaleDateString('id-ID', {timeZone:'Asia/Jakarta', day:'numeric', month:'long', year:'numeric'});
+  if (headerDay) headerDay.textContent = now.toLocaleDateString('id-ID', {timeZone:'Asia/Jakarta', weekday:'long'});
   const menit = parts.hour * 60 + parts.minute;
   const sesi = [
     {jenis:'Masuk', id:'btnMasuk', label:'jadwalMasuk', awal:7*60, akhir:8*60+30, nama:'Masuk pagi'},
@@ -548,6 +929,7 @@ async function aktifkanKamera() {
     });
 
     placeholder.style.display = 'none';
+    setStatusKamera(true, 'Kamera Aktif');
     document.getElementById('btnFoto').disabled = false;
     btn.textContent = 'Kamera Aktif';
 
@@ -557,6 +939,7 @@ async function aktifkanKamera() {
     matikanTrackSaja();
     video.style.display = 'none';
     placeholder.style.display = 'flex';
+    setStatusKamera(false, 'Kamera belum aktif');
     cameraInfo.textContent = 'Kamera belum aktif. Periksa izin browser.';
 
     let msg = err && err.message ? err.message : 'Kesalahan kamera.';
@@ -616,6 +999,7 @@ function ambilFoto() {
   placeholder.style.display = 'none';
 
   matikanTrackSaja();
+  setStatusKamera(false, 'Foto berhasil diambil');
 
   document.getElementById('btnFoto').disabled = true;
   document.getElementById('btnCamera').textContent = 'Aktifkan Kamera';
@@ -625,6 +1009,7 @@ function ambilFoto() {
 
 function matikanKamera() {
   matikanTrackSaja();
+  setStatusKamera(false, 'Kamera dimatikan');
   video.style.display = 'none';
 
   document.getElementById('btnFoto').disabled = true;
@@ -635,6 +1020,7 @@ function matikanKamera() {
 
 function ulangFoto() {
   if (sedangMengirim) return;
+  setStatusKamera(false, 'Kamera belum aktif');
 
   fotoData = null;
   preview.removeAttribute('src');
@@ -883,21 +1269,22 @@ function escapeHtmlRekap(value) {
   });
 }
 
-// Ubah tanggal ISO menjadi format Indonesia, misalnya Jumat, 16 Oktober 2026.
+// Format tanggal rekap menjadi hari dan tanggal Indonesia, tanpa mengubah data server.
 function formatTanggalRekap(value) {
-  const raw = String(value == null ? '' : value).trim();
-  const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const teks = String(value == null ? '' : value).trim();
+  if (!teks) return '—';
   let tanggal;
-  if (match) {
-    // Gunakan waktu tengah hari lokal agar tanggal tidak bergeser karena zona waktu.
-    tanggal = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), 12, 0, 0);
+  const iso = teks.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (iso) {
+    // Gunakan waktu lokal agar tanggal tidak bergeser akibat konversi UTC.
+    tanggal = new Date(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]));
   } else {
-    tanggal = new Date(raw);
+    tanggal = new Date(teks);
   }
-  if (isNaN(tanggal.getTime())) return raw;
-  return new Intl.DateTimeFormat('id-ID', {
+  if (Number.isNaN(tanggal.getTime())) return teks;
+  return tanggal.toLocaleDateString('id-ID', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-  }).format(tanggal);
+  });
 }
 
 function ambilRekapJSONP(bulan) {
